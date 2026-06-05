@@ -1583,7 +1583,7 @@
   </section>
 
   <div class="toast" id="toast"></div>
-  <audio id="bgmAudio" src="assets/audio/sanfu_bgm.wav" preload="auto" loop></audio>
+  <audio id="bgmAudio" src="assets/audio/sanfu_bgm.m4a" preload="none" loop></audio>
 
   <script>
 
@@ -2732,7 +2732,7 @@
       const clothingOptions = clothes.map(item => `
         <button class="option-btn ${state.selectedClothes[categoryId] === item.id ? "active" : ""}" data-item-id="${item.id}">
           <div class="option-icon">
-            <img src="${getClothingThumb(item)}" alt="${item.shortName}" onerror="this.src='${item.img}'" />
+            <img src="${getClothingThumb(item)}" alt="${item.shortName}" loading="lazy" decoding="async" draggable="false" onerror="this.src='${item.img}'" />
           </div>
           <span>${item.shortName}</span>
         </button>
