@@ -1,0 +1,3077 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>三福潮趣搭案局｜H5互动换装</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --pink: #ff4f8b;
+      --orange: #ff9a3d;
+      --yellow: #ffe66d;
+      --blue: #65d7ff;
+      --purple: #9a7cff;
+      --green: #57dfb6;
+      --ink: #2b2430;
+      --text: #5f5260;
+      --glass: rgba(255, 255, 255, 0.78);
+      --shadow: 0 12px 30px rgba(255, 79, 139, 0.16);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 10%, rgba(255, 230, 109, 0.7), transparent 25%),
+        radial-gradient(circle at 88% 15%, rgba(101, 215, 255, 0.52), transparent 26%),
+        radial-gradient(circle at 50% 90%, rgba(255, 79, 139, 0.38), transparent 34%),
+        linear-gradient(180deg, #fff7fb 0%, #fff2e6 45%, #f5fbff 100%);
+      overflow-x: hidden;
+    }
+
+    button {
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .page {
+      width: min(430px, 100%);
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 16px 14px 28px;
+    }
+
+    .topbar {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .brand-logo {
+      width: 210px;
+      max-width: 82%;
+      margin: 0 auto 8px;
+      filter: drop-shadow(0 8px 16px rgba(255, 79, 139, .16));
+    }
+
+    .brand-slogan {
+      display: inline-flex;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      color: #6a5261;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .music-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.86);
+      color: var(--pink);
+      font-size: 12px;
+      font-weight: 1000;
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      backdrop-filter: blur(8px);
+      transition: transform .18s ease, background .18s ease;
+    }
+
+    .music-toggle:active {
+      transform: scale(.96);
+      background: #fff;
+    }
+
+    .card {
+      border-radius: 26px;
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.86);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .intro-card {
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .intro-card h1 {
+      font-size: 21px;
+      color: var(--pink);
+      margin-bottom: 8px;
+    }
+
+    .intro-card p {
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+
+    .intro-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 11px;
+    }
+
+    .intro-badges span {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      color: #7a5969;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 18px 3px 10px;
+    }
+
+    .section-title h2 {
+      font-size: 17px;
+    }
+
+    .section-title span {
+      font-size: 12px;
+      color: #8b7584;
+      font-weight: 800;
+    }
+
+    /* 角色选择 */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .role-card {
+      position: relative;
+      min-height: 142px;
+      padding: 10px;
+      border-radius: 22px;
+      border: 2px solid rgba(255,255,255,.88);
+      background: rgba(255,255,255,.78);
+      overflow: hidden;
+      text-align: left;
+      transition: .18s ease;
+    }
+
+    .role-card.active {
+      border-color: var(--pink);
+      background: #fff;
+      box-shadow: 0 12px 24px rgba(255,79,139,.18);
+      transform: translateY(-2px);
+    }
+
+    .role-card::after {
+      content: "";
+      position: absolute;
+      right: -26px;
+      bottom: -30px;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: var(--role-glow);
+      z-index: 0;
+    }
+
+    .role-info {
+      position: relative;
+      z-index: 2;
+      width: 66%;
+    }
+
+    .role-emoji {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .role-name {
+      font-size: 15px;
+      font-weight: 1000;
+      margin-bottom: 4px;
+    }
+
+    .role-desc {
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: #7e6c79;
+    }
+
+    .role-thumb {
+      position: absolute;
+      right: 4px;
+      bottom: 4px;
+      z-index: 2;
+      width: 75px;
+      height: 118px;
+      object-fit: contain;
+      object-position: center bottom;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,.12));
+      pointer-events: none;
+    }
+
+    /* 场景选择 */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+    }
+
+    .scene-card {
+      min-height: 96px;
+      padding: 12px;
+      border-radius: 20px;
+      border: 2px solid rgba(255,255,255,.9);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.86), rgba(255,255,255,.58)),
+        var(--scene-bg);
+      text-align: left;
+      box-shadow: 0 8px 18px rgba(255,79,139,.08);
+      transition: .18s ease;
+    }
+
+    .scene-card.active {
+      border-color: var(--pink);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,255,255,.76)),
+        var(--scene-bg);
+      box-shadow: 0 12px 24px rgba(255,79,139,.18);
+      transform: translateY(-2px);
+    }
+
+    .scene-emoji {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .scene-name {
+      margin-bottom: 4px;
+      font-size: 14px;
+      font-weight: 1000;
+      color: var(--ink);
+    }
+
+    .scene-desc {
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: #776370;
+    }
+
+    /* 游戏区 */
+    .game-card {
+      margin-top: 15px;
+      padding: 14px 12px 16px;
+    }
+
+    .stage {
+      position: relative;
+      width: 290px;
+      height: 432px;
+      margin: 0 auto 14px;
+      border-radius: 32px;
+      border: 3px solid rgba(255,255,255,.9);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,.95), rgba(255,255,255,.55) 42%, transparent 68%),
+        linear-gradient(180deg, var(--stage-a), var(--stage-b));
+      box-shadow: 0 14px 32px rgba(255,79,139,.15);
+    }
+
+    .stage::before {
+      content: "SANFU STYLE LAB";
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      color: rgba(255,79,139,.52);
+      font-size: 10px;
+      letter-spacing: 1.4px;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .stage-deco {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .stage-deco span {
+      position: absolute;
+      opacity: .45;
+      font-size: 20px;
+      animation: decoFloat 3.2s ease-in-out infinite;
+    }
+
+    .stage-deco span:nth-child(1) { left: 28px; top: 70px; }
+    .stage-deco span:nth-child(2) { right: 24px; top: 118px; animation-delay: .8s; }
+    .stage-deco span:nth-child(3) { left: 36px; bottom: 78px; animation-delay: 1.4s; }
+
+    @keyframes decoFloat {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-10px) rotate(6deg); }
+    }
+
+    .avatar-wrap {
+      --avatar-stage-scale: .68;
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      width: 360px;
+      height: 560px;
+      transform: translateX(-50%) scale(var(--avatar-stage-scale));
+      transform-origin: bottom center;
+      z-index: 4;
+      animation: avatarBreath 3.2s ease-in-out infinite;
+    }
+
+    @keyframes avatarBreath {
+      0%, 100% { transform: translateX(-50%) translateY(0) scale(var(--avatar-stage-scale)) rotate(-.2deg); }
+      50% { transform: translateX(-50%) translateY(-5px) scale(var(--avatar-stage-scale)) rotate(.2deg); }
+    }
+
+    .avatar-wrap.switching {
+      animation: roleSwitch .42s ease both;
+    }
+
+    @keyframes roleSwitch {
+      from { opacity: 0; transform: translateX(-50%) translateY(14px) scale(calc(var(--avatar-stage-scale) * .96)); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0) scale(var(--avatar-stage-scale)); }
+    }
+
+    .avatar-shadow {
+      position: absolute;
+      left: 50%;
+      bottom: -2px;
+      width: 126px;
+      height: 16px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.1);
+      filter: blur(5px);
+      z-index: 0;
+    }
+
+    .base-avatar,
+    .wear-shell {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 360px;
+      height: 560px;
+      transform: translateX(-50%);
+      transform-origin: center;
+      pointer-events: none;
+    }
+
+    .base-avatar {
+      z-index: 2;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,.14));
+    }
+
+    .asset-missing {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 360px;
+      height: 560px;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      border: 2px dashed rgba(255,79,139,.26);
+      border-radius: 38px;
+      background: rgba(255,255,255,.52);
+      color: #7b6170;
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+      padding: 18px;
+    }
+
+    .asset-missing strong {
+      color: var(--pink);
+      font-size: 16px;
+    }
+
+    .wear-shell {
+      display: none;
+      transform: translate(calc(-50% + var(--fit-x, 0px)), var(--fit-y, 0px));
+      z-index: 6;
+    }
+
+    .wear-shell.active {
+      display: block;
+      animation: dressPop .24s ease both;
+    }
+
+    .wear-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: var(--fit-opacity, 1);
+      transform: scale(var(--fit-scale, 1)) rotate(var(--fit-rotation, 0deg));
+      transform-origin: center;
+      pointer-events: none;
+    }
+
+    @keyframes dressPop {
+      from { opacity: 0; }
+      to { opacity: var(--fit-opacity, 1); }
+    }
+
+    .layer-hat { z-index: 8; }
+    .layer-top { z-index: 6; }
+    .layer-coat { z-index: 7; }
+    .layer-bottom { z-index: 5; }
+    .layer-shoes { z-index: 9; }
+    .layer-accessory { z-index: 10; }
+
+    .wear-chip {
+      position: absolute;
+      left: 50%;
+      display: none;
+      transform: translateX(-50%);
+      z-index: 20;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 1000;
+      text-shadow: 0 2px 5px rgba(0,0,0,.2);
+      box-shadow: 0 6px 14px rgba(0,0,0,.12);
+      animation: dressPop .24s ease both;
+      white-space: nowrap;
+    }
+
+    .chip-hat { top: 52px; background: linear-gradient(135deg, #ff72a6, #ffb35e); }
+    .chip-top { top: 144px; background: linear-gradient(135deg, #65d7ff, #818cff); }
+    .chip-coat { top: 128px; background: linear-gradient(135deg, #41445f, #8d84ff); }
+    .chip-bottom { top: 244px; background: linear-gradient(135deg, #5d82ff, #55d2c3); }
+    .chip-shoes { top: 344px; background: linear-gradient(135deg, #333, #777); }
+    .chip-accessory { top: 96px; background: linear-gradient(135deg, #ffd76b, #ff8fb1); }
+
+    .role-tag {
+      position: absolute;
+      left: 50%;
+      bottom: 8px;
+      transform: translateX(-50%);
+      z-index: 30;
+      padding: 5px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.94);
+      color: var(--pink);
+      font-size: 12px;
+      font-weight: 1000;
+      box-shadow: 0 5px 12px rgba(0,0,0,.08);
+      white-space: nowrap;
+    }
+
+    .buddy-tip {
+      margin: -4px 0 12px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.92);
+      color: #66505f;
+      font-size: 12.5px;
+      line-height: 1.55;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(0,0,0,.05);
+    }
+
+    .buddy-tip strong {
+      color: var(--pink);
+      font-weight: 1000;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 0 10px;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .tabs.dragging,
+    .option-list.dragging {
+      cursor: grabbing;
+      scroll-behavior: auto;
+    }
+
+    .tabs::-webkit-scrollbar,
+    .option-list::-webkit-scrollbar {
+      height: 0;
+    }
+
+    .tab-btn {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,.9);
+      background: rgba(255,255,255,.82);
+      color: #6f5a68;
+      font-size: 13px;
+      font-weight: 1000;
+      transition: .18s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 8px 16px rgba(43,36,48,.18);
+    }
+
+    .option-list {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding: 10px 4px 8px;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .option-btn {
+      flex: 0 0 84px;
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      border: 2px solid #fff;
+      border-radius: 18px;
+      background: #fff8fb;
+      color: #594752;
+      box-shadow: 0 5px 12px rgba(255,79,139,.08);
+      font-size: 11.5px;
+      font-weight: 1000;
+      overflow: hidden;
+      transition: .18s ease;
+    }
+
+    .option-btn.active {
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      color: #fff;
+      box-shadow: 0 8px 16px rgba(255,79,139,.24);
+    }
+
+    .option-icon {
+      width: 42px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .option-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 5px rgba(0,0,0,.08));
+    }
+
+    .option-empty-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px dashed rgba(118,95,111,.45);
+      color: #8a7482;
+      font-size: 18px;
+      font-weight: 1000;
+      line-height: 1;
+      background: rgba(255,255,255,.72);
+    }
+
+    .option-btn.active .option-empty-icon {
+      border-color: rgba(255,255,255,.92);
+      color: #fff;
+      background: rgba(255,255,255,.18);
+    }
+
+    .progress-tip {
+      margin-top: 7px;
+      padding: 8px 10px;
+      text-align: center;
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      color: #765f6f;
+      font-size: 12.5px;
+      font-weight: 800;
+    }
+
+    .combo-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+      min-height: 28px;
+      margin-top: 8px;
+    }
+
+    .combo-strip span {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      color: #7a5969;
+      font-size: 11.5px;
+      font-weight: 900;
+      box-shadow: 0 5px 12px rgba(255,79,139,.07);
+    }
+
+    .generate-btn {
+      width: 100%;
+      margin-top: 13px;
+      padding: 15px 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--pink), var(--orange));
+      color: #fff;
+      font-size: 17px;
+      font-weight: 1000;
+      box-shadow: 0 12px 24px rgba(255,79,139,.28);
+      transition: .18s ease;
+    }
+
+    .generate-btn.ready {
+      animation: readyPulse 1.1s infinite alternate;
+    }
+
+    @keyframes readyPulse {
+      from { filter: brightness(1); transform: translateY(0); }
+      to { filter: brightness(1.08); transform: translateY(-2px); }
+    }
+
+    .micro-copy {
+      margin-top: 9px;
+      text-align: center;
+      color: #8c7884;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    /* 结果页 */
+    .result-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(30,18,32,.7);
+      backdrop-filter: blur(8px);
+    }
+
+    .poster {
+      width: min(370px, 94vw);
+      max-height: 92vh;
+      overflow-y: auto;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,230,109,.34), transparent 26%),
+        linear-gradient(180deg, #fff, #fff6fa 58%, #fff0e7 100%);
+      box-shadow: 0 24px 54px rgba(0,0,0,.26);
+      padding: 22px 20px 20px;
+    }
+
+    .poster::-webkit-scrollbar { width: 0; }
+
+    .poster-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .poster-brand {
+      color: var(--pink);
+      font-size: 12px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+    }
+
+    .poster-chip {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 1000;
+    }
+
+    .poster-scene {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,79,139,.1);
+      color: #795465;
+      font-size: 12px;
+      font-weight: 1000;
+    }
+
+    .result-title {
+      margin-bottom: 8px;
+      color: var(--pink);
+      font-size: 27px;
+      line-height: 1.18;
+      font-weight: 1000;
+    }
+
+    .result-subtitle {
+      margin-bottom: 12px;
+      color: #7a6574;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .poster-visual {
+      min-height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 8px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(255,79,139,.13), rgba(101,215,255,.18), rgba(255,230,109,.22));
+      overflow: hidden;
+    }
+
+    .poster-avatar {
+      width: 94px;
+      height: 130px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,.12));
+    }
+
+    .poster-look {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .poster-items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .poster-item {
+      min-height: 54px;
+      padding: 6px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.76);
+      border: 1px solid rgba(255,255,255,.9);
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .poster-item img {
+      width: 26px;
+      height: 30px;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,.08));
+    }
+
+    .poster-item span {
+      color: #685360;
+      font-size: 10.5px;
+      line-height: 1.28;
+      font-weight: 900;
+    }
+
+    .poster-emoji {
+      font-size: 32px;
+      animation: resultFloat 1.8s infinite ease-in-out;
+    }
+
+    @keyframes resultFloat {
+      0%,100% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-8px) rotate(5deg); }
+    }
+
+    .result-desc {
+      margin-bottom: 13px;
+      color: #584d56;
+      font-size: 14.5px;
+      line-height: 1.72;
+    }
+
+    .result-block {
+      margin-bottom: 11px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(255,255,255,.88);
+    }
+
+    .result-block h3 {
+      margin-bottom: 7px;
+      font-size: 14px;
+    }
+
+    .result-block p,
+    .result-block li {
+      color: #6d5b67;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .result-block ul {
+      list-style: none;
+      display: grid;
+      gap: 4px;
+    }
+
+    .result-block li::before {
+      content: "✦ ";
+      color: var(--pink);
+      font-weight: 1000;
+    }
+
+    .share-copy {
+      margin-bottom: 14px;
+      padding: 12px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,79,139,.1), rgba(255,154,61,.12));
+      color: #6d5363;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+
+    .poster-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .close-btn,
+    .share-btn {
+      padding: 12px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 1000;
+    }
+
+    .close-btn {
+      background: #fff;
+      color: var(--pink);
+      box-shadow: 0 8px 16px rgba(255,79,139,.12);
+    }
+
+    .share-btn {
+      background: linear-gradient(90deg, var(--pink), var(--orange));
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(255,79,139,.24);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      z-index: 60;
+      transform: translateX(-50%) translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(43,36,48,.92);
+      color: #fff;
+      font-size: 13px;
+      transition: .25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* 开场动画：打开衣柜，看见潮趣新世界 */
+    .opening-screen {
+      --opening-scene-w: 238px;
+      --opening-scene-h: 256px;
+      --wardrobe-w: 190px;
+      --wardrobe-h: 226px;
+      --wardrobe-light-w: 170px;
+      --wardrobe-light-h: 188px;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: max(18px, env(safe-area-inset-top)) 22px max(22px, env(safe-area-inset-bottom));
+      background:
+        radial-gradient(circle at 20% 12%, rgba(255, 230, 109, .72), transparent 24%),
+        radial-gradient(circle at 86% 16%, rgba(101, 215, 255, .55), transparent 25%),
+        linear-gradient(145deg, #ff4f8b 0%, #ff9a3d 70%, #ffe66d 100%);
+      overflow-x: hidden;
+      overflow-y: auto;
+      transition: opacity .65s ease, visibility .65s ease;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .opening-screen.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .opening-bg-shape {
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      filter: blur(.2px);
+      animation: openingFloat 4s ease-in-out infinite;
+    }
+
+    .shape-1 {
+      width: 120px;
+      height: 120px;
+      left: -32px;
+      top: 80px;
+    }
+
+    .shape-2 {
+      width: 90px;
+      height: 90px;
+      right: -18px;
+      top: 150px;
+      animation-delay: .8s;
+    }
+
+    .shape-3 {
+      width: 160px;
+      height: 160px;
+      right: 38px;
+      bottom: -62px;
+      animation-delay: 1.4s;
+    }
+
+    @keyframes openingFloat {
+      0%, 100% { transform: translateY(0) scale(1); opacity: .55; }
+      50% { transform: translateY(-16px) scale(1.06); opacity: .88; }
+    }
+
+    .opening-card {
+      width: min(380px, 94vw);
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      text-align: center;
+      padding-top: 0;
+      animation: openingEnter .72s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    @keyframes openingEnter {
+      from { opacity: 0; transform: translateY(24px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .opening-brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .opening-brand,
+    .opening-theme {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 1000;
+      letter-spacing: .6px;
+      border: 1px solid rgba(255,255,255,.32);
+      background: rgba(255,255,255,.18);
+      backdrop-filter: blur(8px);
+    }
+
+    .opening-theme {
+      color: #fff7c8;
+    }
+
+    .wardrobe-scene {
+      width: var(--opening-scene-w);
+      height: var(--opening-scene-h);
+      margin: 0 auto 15px;
+      position: relative;
+      perspective: 900px;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      display: block;
+      font: inherit;
+      touch-action: manipulation;
+      transform: translateZ(0);
+    }
+
+    .wardrobe-scene:focus-visible {
+      outline: 3px solid rgba(255,255,255,.9);
+      outline-offset: 7px;
+      border-radius: 34px;
+    }
+
+    .wardrobe-scene:active .wardrobe-body {
+      transform: translateX(-50%) scale(.985);
+    }
+
+    .wardrobe-light {
+      position: absolute;
+      left: 50%;
+      top: 30px;
+      width: var(--wardrobe-light-w);
+      height: var(--wardrobe-light-h);
+      transform: translateX(-50%);
+      border-radius: 42px;
+      background:
+        radial-gradient(circle, rgba(255,255,255,.96) 0%, rgba(255,230,109,.78) 30%, rgba(101,215,255,.58) 60%, transparent 78%);
+      animation: wardrobeLight 1.7s ease-in-out infinite alternate;
+      filter: blur(1px);
+    }
+
+    .opening-screen.is-opening .wardrobe-light {
+      animation: wardrobeBurst 1.12s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    @keyframes wardrobeLight {
+      from { opacity: .68; transform: translateX(-50%) scale(.94); }
+      to { opacity: 1; transform: translateX(-50%) scale(1.08); }
+    }
+
+    @keyframes wardrobeBurst {
+      0% { opacity: .7; transform: translateX(-50%) scale(.95); filter: blur(1px); }
+      45% { opacity: 1; transform: translateX(-50%) scale(1.22); filter: blur(2px); }
+      100% { opacity: .92; transform: translateX(-50%) scale(1.08); filter: blur(1px); }
+    }
+
+    .wardrobe-body {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: var(--wardrobe-w);
+      height: var(--wardrobe-h);
+      transform: translateX(-50%);
+      border-radius: 30px 30px 18px 18px;
+      border: 5px solid rgba(255,255,255,.92);
+      background: linear-gradient(180deg, #fff, #fff0f7);
+      box-shadow: 0 22px 46px rgba(105,24,75,.3);
+      overflow: hidden;
+    }
+
+    .wardrobe-inner {
+      position: absolute;
+      inset: 22px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(255,230,109,.72), rgba(101,215,255,.6), rgba(154,124,255,.48));
+      overflow: hidden;
+    }
+
+    .wardrobe-door {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 4;
+      background: linear-gradient(155deg, #ff75a7, #ff9a3d);
+      border: 4px solid #fff;
+    }
+
+    .door-left {
+      left: 0;
+      border-radius: 26px 0 0 14px;
+      transform-origin: left center;
+    }
+
+    .door-right {
+      right: 0;
+      border-radius: 0 26px 14px 0;
+      transform-origin: right center;
+    }
+
+    .opening-screen.is-opening .wardrobe-door {
+      animation-duration: 1.08s;
+      animation-delay: .12s;
+      animation-fill-mode: forwards;
+      animation-timing-function: cubic-bezier(.22,1,.36,1);
+    }
+
+    .opening-screen.is-opening .door-left {
+      animation-name: openDoorLeft;
+    }
+
+    .opening-screen.is-opening .door-right {
+      animation-name: openDoorRight;
+    }
+
+    .wardrobe-door::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 0 5px rgba(255,255,255,.2);
+    }
+
+    .door-left::after { right: 13px; }
+    .door-right::after { left: 13px; }
+
+    @keyframes openDoorLeft { to { transform: rotateY(-112deg); } }
+    @keyframes openDoorRight { to { transform: rotateY(112deg); } }
+
+    .wardrobe-item {
+      position: absolute;
+      z-index: 5;
+      font-size: 31px;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,.16));
+      opacity: 0;
+      transform: translateY(24px) scale(.58) rotate(-12deg);
+    }
+
+    .opening-screen.is-opening .wardrobe-item {
+      animation: itemFly 1.05s ease-in-out both;
+    }
+
+    .item-1 { left: 18px; top: 58px; animation-delay: .2s; }
+    .item-2 { right: 18px; top: 72px; animation-delay: .28s; }
+    .item-3 { left: 84px; bottom: 36px; animation-delay: .36s; }
+    .item-4 { right: 72px; top: 32px; animation-delay: .44s; }
+
+    @keyframes itemFly {
+      0% { opacity: 0; transform: translateY(24px) scale(.58) rotate(-12deg); }
+      30%, 72% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-56px) scale(1.12) rotate(13deg); }
+    }
+
+    .opening-title {
+      margin-bottom: 10px;
+      font-size: 28px;
+      line-height: 1.18;
+      font-weight: 1000;
+      text-shadow: 0 5px 16px rgba(105,24,75,.22);
+    }
+
+    .opening-title span {
+      color: #fff7a8;
+    }
+
+    .opening-copy {
+      margin: 0 auto 14px;
+      width: min(100%, 320px);
+      max-width: min(320px, calc(100vw - 44px));
+      color: rgba(255,255,255,.95);
+      font-size: 14px;
+      line-height: 1.62;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .opening-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+      margin: 0 auto 16px;
+      max-width: min(320px, calc(100vw - 44px));
+    }
+
+    .opening-tags span {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      color: var(--pink);
+      font-size: 12px;
+      font-weight: 1000;
+    }
+
+    .opening-action-hint {
+      width: min(100%, 320px);
+      box-sizing: border-box;
+      padding: 13px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.9);
+      color: var(--pink);
+      font-size: 15px;
+      font-weight: 1000;
+      box-shadow: 0 14px 28px rgba(106,24,75,.16);
+      animation: openingBtnPulse 1.35s infinite alternate;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .opening-action-hint:focus-visible {
+      outline: 3px solid rgba(255,255,255,.9);
+      outline-offset: 4px;
+    }
+
+    .opening-action-hint:active {
+      transform: scale(.98);
+      box-shadow: 0 8px 18px rgba(106,24,75,.16);
+      background: #fff;
+    }
+
+    @keyframes openingBtnPulse {
+      from { transform: scale(1); filter: brightness(1); }
+      to { transform: scale(1.035); filter: brightness(1.03); }
+    }
+
+    .opening-gesture-copy {
+      margin-top: 11px;
+      color: rgba(255,255,255,.9);
+      font-size: 12.5px;
+      font-weight: 800;
+    }
+
+    .page {
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: opacity .55s ease, transform .55s ease;
+    }
+
+    body.game-started .page {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    @media (max-height: 760px) {
+      .opening-screen {
+        --opening-scene-w: 204px;
+        --opening-scene-h: 218px;
+        --wardrobe-w: 164px;
+        --wardrobe-h: 194px;
+        --wardrobe-light-w: 146px;
+        --wardrobe-light-h: 160px;
+        padding: max(10px, env(safe-area-inset-top)) 18px max(12px, env(safe-area-inset-bottom));
+      }
+
+      .opening-brand-row {
+        margin-bottom: 8px;
+      }
+
+      .opening-brand,
+      .opening-theme {
+        padding: 5px 9px;
+        font-size: 10px;
+      }
+
+      .wardrobe-scene {
+        margin-bottom: 9px;
+      }
+
+      .wardrobe-inner {
+        inset: 17px;
+      }
+
+      .wardrobe-body {
+        border-width: 4px;
+        border-radius: 25px 25px 15px 15px;
+      }
+
+      .wardrobe-door {
+        border-width: 3px;
+      }
+
+      .opening-title {
+        margin-bottom: 7px;
+        font-size: 25px;
+      }
+
+      .opening-copy {
+        margin-bottom: 9px;
+        font-size: 12.8px;
+        line-height: 1.48;
+      }
+
+      .opening-tags {
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+
+      .opening-tags span {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+
+      .opening-action-hint {
+        padding: 11px 16px;
+        font-size: 14px;
+      }
+
+      .opening-gesture-copy {
+        margin-top: 7px;
+        font-size: 11.5px;
+      }
+    }
+
+    @media (max-height: 660px) {
+      .opening-screen {
+        --opening-scene-w: 174px;
+        --opening-scene-h: 187px;
+        --wardrobe-w: 140px;
+        --wardrobe-h: 166px;
+        --wardrobe-light-w: 124px;
+        --wardrobe-light-h: 136px;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .opening-card {
+        width: min(360px, calc(100vw - 28px));
+      }
+
+      .wardrobe-light {
+        top: 22px;
+      }
+
+      .wardrobe-inner {
+        inset: 14px;
+        border-radius: 18px;
+      }
+
+      .wardrobe-door::after {
+        width: 10px;
+        height: 10px;
+      }
+
+      .door-left::after { right: 10px; }
+      .door-right::after { left: 10px; }
+
+      .wardrobe-item {
+        font-size: 24px;
+      }
+
+      .item-1 { left: 12px; top: 46px; }
+      .item-2 { right: 12px; top: 58px; }
+      .item-3 { left: 61px; bottom: 26px; }
+      .item-4 { right: 49px; top: 24px; }
+
+      .opening-title {
+        font-size: 22px;
+      }
+
+      .opening-copy {
+        font-size: 12px;
+        line-height: 1.42;
+        max-width: 236px;
+      }
+
+      .opening-action-hint {
+        width: min(100%, 288px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="opening-screen" id="openingScreen">
+    <div class="opening-bg-shape shape-1"></div>
+    <div class="opening-bg-shape shape-2"></div>
+    <div class="opening-bg-shape shape-3"></div>
+
+    <div class="opening-card">
+      <div class="opening-brand-row">
+        <span class="opening-brand">SANFU STYLE TEST</span>
+        <span class="opening-theme">潮趣好搭子</span>
+      </div>
+
+      <button class="wardrobe-scene" id="wardrobeOpenBtn" type="button" aria-label="点击衣柜门，推开今日搭案">
+        <div class="wardrobe-light"></div>
+        <div class="wardrobe-body">
+          <div class="wardrobe-inner">
+            <span class="wardrobe-item item-1">👕</span>
+            <span class="wardrobe-item item-2">🧢</span>
+            <span class="wardrobe-item item-3">👟</span>
+            <span class="wardrobe-item item-4">✨</span>
+          </div>
+          <div class="wardrobe-door door-left"></div>
+          <div class="wardrobe-door door-right"></div>
+        </div>
+      </button>
+
+      <h1 class="opening-title">今天主什么局？<br /><span>三福陪你搭</span></h1>
+      <p class="opening-copy">
+        选一个生活场景，搭一套三福单品，<br />让潮趣和心情一起开局。
+      </p>
+
+      <div class="opening-tags" aria-label="三福潮趣好搭子关键词">
+        <span>好逛</span>
+        <span>好搭</span>
+        <span>好出片</span>
+        <span>一起主个局</span>
+      </div>
+
+      <button class="opening-action-hint" id="openingHintBtn" type="button">点击衣柜门，推开今日搭案</button>
+      <div class="opening-gesture-copy">三福已经把潮趣灵感放进衣柜里啦</div>
+    </div>
+  </section>
+
+  <main class="page" id="mainPage">
+    <header class="topbar">
+      <img class="brand-logo" src="三福logo-1.png" alt="三福Logo" onerror="this.style.display='none'" />
+      <div class="brand-slogan">潮趣好搭子 · 和潮趣一起主个局</div>
+      <div class="topbar-actions">
+        <button class="music-toggle" id="musicToggle" type="button" aria-pressed="false">音乐 开</button>
+      </div>
+    </header>
+
+    <section class="intro-card card">
+      <h1>三福潮趣搭案局</h1>
+      <p>从真实生活出发，选择今天要主的局，再用三福多品类单品搭出场景、情绪和人格。三福不是替你定义潮流，而是做那个懂你、陪你一起搭生活的好搭子。</p>
+      <div class="intro-badges">
+        <span>搭场景</span>
+        <span>搭情绪</span>
+        <span>搭单品</span>
+        <span>搭出生活感</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>Step 1 今天主什么局</h2>
+        <span>先选场景，再搭生活</span>
+      </div>
+      <div class="scene-grid" id="sceneGrid"></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>Step 2 选择今日搭子人格</h2>
+        <span>角色定气质，单品定表达</span>
+      </div>
+      <div class="role-grid" id="roleGrid"></div>
+    </section>
+
+    <section class="game-card card">
+      <div class="section-title" style="margin-top:0;">
+        <h2>Step 3 搭配三福单品</h2>
+        <span id="moodText">甜趣开局中</span>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="stage-deco" id="stageDeco"></div>
+        <div class="avatar-wrap" id="avatarWrap">
+          <div class="avatar-shadow"></div>
+          <img class="base-avatar" id="baseAvatar" alt="基础模特" />
+          <div class="asset-missing" id="avatarMissing">
+            <strong>基础模特未加载</strong>
+            <span>请放入 assets/avatars/ 对应 PNG</span>
+          </div>
+          <div class="wear-shell layer-bottom" data-layer="bottom">
+            <img class="wear-layer" id="layerBottom" alt="??" />
+          </div>
+          <div class="wear-shell layer-top" data-layer="top">
+            <img class="wear-layer" id="layerTop" alt="??" />
+          </div>
+          <div class="wear-shell layer-coat" data-layer="coat">
+            <img class="wear-layer" id="layerCoat" alt="??" />
+          </div>
+          <div class="wear-shell layer-shoes" data-layer="shoes">
+            <img class="wear-layer" id="layerShoes" alt="??" />
+          </div>
+          <div class="wear-shell layer-hat" data-layer="hat">
+            <img class="wear-layer" id="layerHat" alt="??" />
+          </div>
+          <div class="wear-shell layer-accessory" data-layer="accessory">
+            <img class="wear-layer" id="layerAccessory" alt="??" />
+          </div>
+
+          <span class="wear-chip chip-hat" id="chipHat"></span>
+          <span class="wear-chip chip-top" id="chipTop"></span>
+          <span class="wear-chip chip-coat" id="chipCoat"></span>
+          <span class="wear-chip chip-bottom" id="chipBottom"></span>
+          <span class="wear-chip chip-shoes" id="chipShoes"></span>
+          <span class="wear-chip chip-accessory" id="chipAccessory"></span>
+        </div>
+        <div class="role-tag" id="roleTag">元气甜妹</div>
+      </div>
+
+      <div class="tabs" id="tabs"></div>
+      <div class="option-list" id="optionList"></div>
+      <div class="buddy-tip" id="buddyTip"><strong>三福搭子提示：</strong>先选一个单品，让这局有个出发点。</div>
+      <div class="progress-tip" id="progressTip">已搭配 0/6 件，先选一顶帽子吧！</div>
+      <div class="combo-strip" id="comboStrip"></div>
+      <button class="generate-btn" id="generateBtn">生成我的三福潮趣搭案海报</button>
+      <p class="micro-copy">不想选的品类可以留白。三福负责给你更多灵感，你负责把今天这局主起来。</p>
+    </section>
+  </main>
+
+  <section class="result-modal" id="resultModal">
+    <div class="poster">
+      <div class="poster-top">
+        <div class="poster-brand">SANFU 潮趣好搭子</div>
+        <div class="poster-chip">潮趣搭案报告</div>
+      </div>
+      <div class="poster-scene" id="posterScene"></div>
+      <h2 class="result-title" id="resultTitle"></h2>
+      <div class="result-subtitle" id="resultSubtitle"></div>
+      <div class="poster-visual" id="posterVisual"></div>
+      <p class="result-desc" id="resultDesc"></p>
+      <div class="result-block">
+        <h3>你的今日搭案</h3>
+        <p id="outfitPlanText"></p>
+      </div>
+      <div class="result-block">
+        <h3>你的主局关键词</h3>
+        <ul id="keywordList"></ul>
+      </div>
+      <div class="result-block">
+        <h3>三福好搭子推荐</h3>
+        <p id="recommendText"></p>
+      </div>
+      <div class="share-copy" id="shareCopy"></div>
+      <div class="poster-actions">
+        <button class="close-btn" id="continueBtn">继续搭配</button>
+        <button class="share-btn" id="shareBtn">复制分享文案</button>
+      </div>
+      <button class="close-btn" id="resetBtn" style="width:100%; margin-top:10px;">重新开局</button>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+  <audio id="bgmAudio" src="assets/audio/sanfu_bgm.wav" preload="auto" loop></audio>
+
+  <script>
+
+    /* =========================================================
+      1. 素材目录约定
+      =========================================================
+      assets/
+        avatars/
+          sweet_base.png       元气甜妹基础模特：极简打底服
+          coolgirl_base.png    甜酷辣妹基础模特：极简打底服
+          artist_base.png      校园文艺生基础模特：极简打底服
+          sunnyboy_base.png    阳光学长基础模特：极简打底服
+          streetboy_base.png   街头酷盖基础模特：极简打底服
+          softboy_base.png     松弛少年基础模特：极简打底服
+        clothes/
+          hats/
+          tops/
+          coats/
+          bottoms/
+          shoes/
+          accessories/
+
+      重要原则：
+      - 基础模特不要穿复杂衣服，只穿背心/短裤/打底服。
+      - 三福服饰统一抠成透明 PNG。
+      - 所有模特尽量统一身体比例，服饰层坐标才能复用。
+    */
+
+    /* =========================================================
+      2. 角色配置：角色负责人格，不负责穿搭
+      ========================================================= */
+    const ROLE_CONFIG = [
+      {
+        id: "sweet",
+        name: "元气甜妹",
+        emoji: "🍓",
+        desc: "甜感、明亮、好亲近，适合把日常穿成可爱出片局。",
+        mood: "甜趣开局中",
+        avatar: "assets/avatars/sweet_base.png",
+        posterAvatar: "assets/avatars/sweet_base.png",
+        stageColors: ["#fff4f8", "#fffafc"],
+        deco: ["♡", "✿", "✧"],
+        glow: "linear-gradient(135deg, rgba(255,79,139,.28), rgba(255,230,109,.18))",
+        boost: { sweet: 3, sunny: 1 }
+      },
+      {
+        id: "coolgirl",
+        name: "甜酷辣妹",
+        emoji: "🕶️",
+        desc: "有态度、有反差，适合街头感和亮眼配饰。",
+        mood: "酷感开局中",
+        avatar: "assets/avatars/coolgirl_base.png",
+        posterAvatar: "assets/avatars/coolgirl_base.png",
+        stageColors: ["#fff1f8", "#f5f1f7"],
+        deco: ["✦", "♡", "⚡"],
+        glow: "linear-gradient(135deg, rgba(43,36,48,.22), rgba(255,79,139,.22))",
+        boost: { cool: 3, sweet: 1 }
+      },
+      {
+        id: "artist",
+        name: "校园文艺生",
+        emoji: "🎨",
+        desc: "温柔、松弛、有故事感，适合氛围叠穿。",
+        mood: "文艺开局中",
+        avatar: "assets/avatars/artist_base.png",
+        posterAvatar: "assets/avatars/artist_base.png",
+        stageColors: ["#f4faff", "#fffdf6"],
+        deco: ["✿", "☁", "✧"],
+        glow: "linear-gradient(135deg, rgba(101,215,255,.2), rgba(255,230,109,.16))",
+        boost: { literary: 3, soft: 1 }
+      },
+      {
+        id: "sunnyboy",
+        name: "阳光学长",
+        emoji: "☀️",
+        desc: "干净清爽、活力满格，适合校园和运动休闲。",
+        mood: "阳光开局中",
+        avatar: "assets/avatars/sunnyboy_base.png",
+        posterAvatar: "assets/avatars/sunnyboy_base.png",
+        stageColors: ["#f1f8ff", "#f8fcff"],
+        deco: ["☆", "🏀", "✦"],
+        glow: "linear-gradient(135deg, rgba(101,215,255,.24), rgba(154,124,255,.14))",
+        boost: { sunny: 3, sporty: 1 }
+      },
+      {
+        id: "streetboy",
+        name: "街头酷盖",
+        emoji: "🔥",
+        desc: "街头、硬朗、有气场，适合工装和潮酷外套。",
+        mood: "街头开局中",
+        avatar: "assets/avatars/streetboy_base.png",
+        posterAvatar: "assets/avatars/streetboy_base.png",
+        stageColors: ["#f5f3fa", "#fff7fb"],
+        deco: ["♛", "⚡", "✦"],
+        glow: "linear-gradient(135deg, rgba(43,36,48,.24), rgba(154,124,255,.16))",
+        boost: { street: 3, cool: 2, sporty: 1 }
+      },
+      {
+        id: "softboy",
+        name: "松弛少年",
+        emoji: "🌿",
+        desc: "舒服自然、好搭耐看，适合基础款和暖色系。",
+        mood: "松弛开局中",
+        avatar: "assets/avatars/softboy_base.png",
+        posterAvatar: "assets/avatars/softboy_base.png",
+        stageColors: ["#fffaf0", "#f9fff8"],
+        deco: ["葉", "☁", "✧"],
+        glow: "linear-gradient(135deg, rgba(255,154,61,.18), rgba(87,223,182,.14))",
+        boost: { soft: 3, casual: 1 }
+      }
+    ];
+
+    const SCENE_CONFIG = [
+      {
+        id: "campus",
+        name: "开学报道局",
+        emoji: "🎒",
+        desc: "清爽、有亲和力，第一眼就好接近。",
+        mood: "开学第一面，搭出清爽好感。",
+        keywords: ["开学好感", "清爽见面", "校园新局"],
+        plan: "用干净上衣、轻便下装和小配饰建立第一印象，既不费力也有记忆点。",
+        scores: { campus: 3, sunny: 1, casual: 1 },
+        bg: "linear-gradient(135deg, rgba(101,215,255,.22), rgba(255,255,255,.5))"
+      },
+      {
+        id: "outing",
+        name: "周末出街局",
+        emoji: "📸",
+        desc: "好逛、好拍、好互动，随手都能出片。",
+        mood: "周末出街，把松弛感穿出镜。",
+        keywords: ["出街好拍", "松弛在线", "随手成片"],
+        plan: "让外套、鞋子和帽子形成一个视觉重点，适合逛街、拍照和朋友局。",
+        scores: { social: 3, street: 1, cool: 1 },
+        bg: "linear-gradient(135deg, rgba(255,79,139,.18), rgba(255,230,109,.2))"
+      },
+      {
+        id: "dorm",
+        name: "宿舍夜聊局",
+        emoji: "🌙",
+        desc: "舒服、不端着，适合放松和分享小心情。",
+        mood: "宿舍夜聊，舒服也要有一点小巧思。",
+        keywords: ["舒服松弛", "夜聊氛围", "好感陪伴"],
+        plan: "用柔软色系和百搭单品降低距离感，让造型像朋友一样舒服。",
+        scores: { soft: 2, casual: 1, literary: 1 },
+        bg: "linear-gradient(135deg, rgba(154,124,255,.18), rgba(255,255,255,.55))"
+      },
+      {
+        id: "club",
+        name: "社团见面局",
+        emoji: "🎧",
+        desc: "有态度、有话题，适合快速找到同频搭子。",
+        mood: "社团见面，用一点个性打开话题。",
+        keywords: ["同频搭子", "社交开场", "个性露出"],
+        plan: "用有识别度的上衣或配饰制造话题，让穿搭成为社交破冰点。",
+        scores: { social: 2, hobby: 2, street: 1 },
+        bg: "linear-gradient(135deg, rgba(87,223,182,.2), rgba(101,215,255,.18))"
+      },
+      {
+        id: "gift",
+        name: "节日送礼局",
+        emoji: "🎁",
+        desc: "甜一点、亮一点，把心意搭得看得见。",
+        mood: "节日送礼，把情绪价值穿在身上。",
+        keywords: ["心意可见", "甜趣加分", "节日灵感"],
+        plan: "用颜色、包包或挂件增加礼物感，表达轻松但认真准备过的小心意。",
+        scores: { gift: 3, sweet: 1, soft: 1 },
+        bg: "linear-gradient(135deg, rgba(255,154,61,.18), rgba(255,79,139,.16))"
+      },
+      {
+        id: "interest",
+        name: "兴趣圈层局",
+        emoji: "🧩",
+        desc: "潮玩、配饰、图案，让爱好变成风格暗号。",
+        mood: "兴趣圈层，把爱好搭成风格暗号。",
+        keywords: ["圈层暗号", "潮玩点睛", "趣味表达"],
+        plan: "用图案单品、挂件和鞋帽形成兴趣符号，让同好一眼看见你。",
+        scores: { hobby: 3, social: 1, sporty: 1 },
+        bg: "linear-gradient(135deg, rgba(255,230,109,.22), rgba(87,223,182,.16))"
+      }
+    ];
+
+    /* =========================================================
+      3. 服饰分类配置
+      ========================================================= */
+    const CATEGORY_CONFIG = [
+      { id: "hat", name: "帽子", layerId: "layerHat", chipId: "chipHat", required: true },
+      { id: "top", name: "上衣", layerId: "layerTop", chipId: "chipTop", required: true },
+      { id: "coat", name: "外套", layerId: "layerCoat", chipId: "chipCoat", required: true },
+      { id: "bottom", name: "下装", layerId: "layerBottom", chipId: "chipBottom", required: true },
+      { id: "shoes", name: "鞋子", layerId: "layerShoes", chipId: "chipShoes", required: true },
+      { id: "accessory", name: "配饰", layerId: "layerAccessory", chipId: "chipAccessory", required: true }
+    ];
+
+    /* =========================================================
+      4. 三福服饰配置
+      后期把 name/img 换成官方三福商品即可。
+      img 建议使用透明 PNG。
+      ========================================================= */
+    const CLOTHING_CONFIG = {
+      hat: [
+        {
+          id: "sanfu_cream_bucket_hat",
+          brandName: "三福复古做旧渔夫帽",
+          shortName: "复古做旧渔夫帽",
+          emoji: "👒",
+          img: "assets/clothes/hats/sanfu_cream_bucket_hat.png",
+          scores: { casual: 2, soft: 2, literary: 1 },
+          tags: ["松弛", "米色", "防晒"]
+        },
+        {
+          id: "sanfu_navy_script_cap",
+          brandName: "三福简约硬顶棒球帽",
+          shortName: "硬顶棒球帽",
+          emoji: "🧢",
+          img: "assets/clothes/hats/sanfu_navy_script_cap.png",
+          scores: { sporty: 3, cool: 2 },
+          tags: ["运动", "街头", "字母"]
+        },
+        {
+          id: "sanfu_brown_newsboy_cap",
+          brandName: "三福松弛波嬉风棉麻八角帽",
+          shortName: "棉麻八角帽",
+          emoji: "🧢",
+          img: "assets/clothes/hats/sanfu_brown_newsboy_cap.png",
+          scores: { literary: 2, cool: 1, casual: 2 },
+          tags: ["复古", "棕色", "氛围"]
+        },
+        {
+          id: "sanfu_mesh_bucket_hat",
+          brandName: "三福休闲大檐渔夫帽",
+          shortName: "大檐渔夫帽",
+          emoji: "👒",
+          img: "assets/clothes/hats/sanfu_mesh_bucket_hat.png",
+          scores: { sunny: 2, casual: 2, soft: 1 },
+          tags: ["网纱", "防晒", "户外"]
+        }
+      ],
+      top: [
+        {
+          id: "sanfu_male_gray_navy_polo",
+          brandName: "三福假两件拼牛仔翻领设计半袖POLO衫（男士）",
+          shortName: "拼牛仔POLO",
+          emoji: "👕",
+          img: "assets/clothes/tops/sanfu_male_gray_navy_polo.png",
+          gender: "male",
+          scores: { sunny: 2, casual: 1, sporty: 1 },
+          tags: ["撞领", "清爽", "运动"]
+        },
+        {
+          id: "sanfu_male_blue_striped_layer_top",
+          brandName: "三福假两件半袖长袖T恤（男款）",
+          shortName: "男款假两件T恤",
+          emoji: "👕",
+          img: "assets/clothes/tops/sanfu_male_blue_striped_layer_top.png",
+          gender: "male",
+          scores: { casual: 2, soft: 1, sunny: 1 },
+          tags: ["条纹", "假两件", "松弛"]
+        },
+        {
+          id: "sanfu_male_brown_contrast_tshirt",
+          brandName: "三福撞色学院宽松凉感圆领半袖打底衫（男款）",
+          shortName: "男款撞色打底衫",
+          emoji: "👕",
+          img: "assets/clothes/tops/sanfu_male_brown_contrast_tshirt.png",
+          gender: "male",
+          scores: { casual: 2, street: 1, soft: 1 },
+          tags: ["撞色", "圆领", "日常"]
+        },
+        {
+          id: "sanfu_male_white_doraemon_tshirt",
+          brandName: "三福卡通元素刺绣圆领宽松半袖（男款）",
+          shortName: "男款卡通半袖",
+          emoji: "👕",
+          img: "assets/clothes/tops/sanfu_male_white_doraemon_tshirt.png",
+          gender: "male",
+          scores: { sunny: 2, casual: 2, soft: 1 },
+          tags: ["白色", "印花", "清爽"]
+        },
+        {
+          id: "sanfu_female_offshoulder_gray_top",
+          brandName: "三福夏季侧边抽绳刺绣圆领宽松上衣",
+          shortName: "侧边抽绳上衣",
+          emoji: "👚",
+          img: "assets/clothes/tops/sanfu_female_offshoulder_gray_top.png",
+          gender: "female",
+          scores: { cool: 2, sweet: 1, literary: 1 },
+          tags: ["露肩", "修身", "氛围"]
+        },
+        {
+          id: "sanfu_female_red_striped_layer_top",
+          brandName: "三福假两件半袖长袖T恤（女款）",
+          shortName: "女款假两件T恤",
+          emoji: "👚",
+          img: "assets/clothes/tops/sanfu_female_red_striped_layer_top.png",
+          gender: "female",
+          scores: { sweet: 2, sunny: 2, casual: 1 },
+          tags: ["条纹", "假两件", "元气"]
+        },
+        {
+          id: "sanfu_female_yellow_dog_tshirt",
+          brandName: "三福卡通元素刺绣圆领宽松半袖（女款）",
+          shortName: "女款卡通半袖",
+          emoji: "👕",
+          img: "assets/clothes/tops/sanfu_female_yellow_dog_tshirt.png",
+          gender: "female",
+          scores: { sweet: 3, sunny: 2, casual: 1 },
+          tags: ["黄色", "可爱", "印花"]
+        },
+        {
+          id: "sanfu_female_cream_contrast_tshirt",
+          brandName: "三福撞色学院宽松凉感圆领半袖打底衫（女款）",
+          shortName: "女款撞色打底衫",
+          emoji: "👕",
+          img: "assets/clothes/tops/sanfu_female_cream_contrast_tshirt.png",
+          gender: "female",
+          scores: { casual: 2, soft: 1, sweet: 1 },
+          tags: ["撞色", "圆领", "日常"]
+        }
+      ],
+      coat: [
+        {
+          id: "sanfu_blue_bow_varsity_jacket",
+          brandName: "三福春季蝴蝶结刺绣休闲撞色棒球服（女士）",
+          shortName: "蝴蝶结棒球服",
+          emoji: "🧥",
+          img: "assets/clothes/coats/sanfu_blue_bow_varsity_jacket.png",
+          scores: { sweet: 3, sunny: 2, sporty: 1 },
+          tags: ["甜美", "学院", "浅蓝"]
+        },
+        {
+          id: "sanfu_burgundy_sport_jacket",
+          brandName: "三福高级感插肩袖夹克翻领宽松上衣（女士）",
+          shortName: "插肩袖夹克",
+          emoji: "🏁",
+          img: "assets/clothes/coats/sanfu_burgundy_sport_jacket.png",
+          scores: { cool: 3, sporty: 2 },
+          tags: ["运动", "酒红", "酷感"]
+        },
+        {
+          id: "sanfu_navy_hooded_jacket",
+          brandName: "三福美式撞色徽章连帽外套（男士）",
+          shortName: "徽章连帽外套",
+          emoji: "🧥",
+          img: "assets/clothes/coats/sanfu_navy_hooded_jacket.png",
+          scores: { sporty: 3, casual: 2, cool: 1 },
+          tags: ["运动", "连帽", "街头"]
+        },
+        {
+          id: "sanfu_cream_windbreaker",
+          brandName: "三福夏季撞色带帽宽松外套（男士）",
+          shortName: "撞色带帽外套",
+          emoji: "⛰️",
+          img: "assets/clothes/coats/sanfu_cream_windbreaker.png",
+          scores: { soft: 2, casual: 2, literary: 1 },
+          tags: ["户外", "米白", "温柔"]
+        },
+        {
+          id: "sanfu_pink_hoodie_jacket",
+          brandName: "三福刺绣连帽开衫外套（女款）",
+          shortName: "刺绣开衫外套",
+          emoji: "🌸",
+          img: "assets/clothes/coats/sanfu_pink_hoodie_jacket.png",
+          scores: { sweet: 3, soft: 2 },
+          tags: ["粉色", "甜美", "软萌"]
+        }
+      ],
+      bottom: [
+        {
+          id: "sanfu_male_beige_drawstring_wide_pants",
+          brandName: "三福美式宽松直筒抽绳腰长裤（男士）",
+          shortName: "抽绳直筒长裤",
+          emoji: "👖",
+          img: "assets/clothes/bottoms/sanfu_male_beige_drawstring_wide_pants.png",
+          gender: "male",
+          scores: { casual: 2, soft: 2, sunny: 1 },
+          tags: ["抽绳", "直筒", "美式"]
+        },
+        {
+          id: "sanfu_male_white_cargo_shorts",
+          brandName: "三福钉珠分割工装中裤（男士）",
+          shortName: "钉珠工装中裤",
+          emoji: "🩳",
+          img: "assets/clothes/bottoms/sanfu_male_white_cargo_shorts.png",
+          gender: "male",
+          scores: { casual: 2, sporty: 1, sunny: 1 },
+          tags: ["工装", "中裤", "利落"]
+        },
+        {
+          id: "sanfu_male_light_denim_jogger_pants",
+          brandName: "三福打褶抽绳莱赛尔牛仔裤（男士）",
+          shortName: "莱赛尔牛仔裤",
+          emoji: "👖",
+          img: "assets/clothes/bottoms/sanfu_male_light_denim_jogger_pants.png",
+          gender: "male",
+          scores: { casual: 2, sporty: 2, sunny: 1 },
+          tags: ["牛仔", "抽绳", "打褶"]
+        },
+        {
+          id: "sanfu_male_gray_drawstring_wide_pants",
+          brandName: "三福蜡染抽绳腰休闲裤（男士）",
+          shortName: "蜡染休闲裤",
+          emoji: "👖",
+          img: "assets/clothes/bottoms/sanfu_male_gray_drawstring_wide_pants.png",
+          gender: "male",
+          scores: { cool: 2, casual: 2, street: 1 },
+          tags: ["蜡染", "抽绳", "休闲"]
+        },
+        {
+          id: "sanfu_male_burgundy_cargo_pants",
+          brandName: "三福工装风松紧腰宽松直筒阔腿裤（男款）",
+          shortName: "男款工装阔腿裤",
+          emoji: "👖",
+          img: "assets/clothes/bottoms/sanfu_male_burgundy_cargo_pants.png",
+          gender: "male",
+          scores: { cool: 3, street: 2, sporty: 1 },
+          tags: ["工装", "酒红", "阔腿"]
+        },
+        {
+          id: "sanfu_female_white_bubble_shorts",
+          brandName: "三福甜美洋气花苞裤（女士）",
+          shortName: "甜美花苞裤",
+          emoji: "🤍",
+          img: "assets/clothes/bottoms/sanfu_female_white_bubble_shorts.png",
+          gender: "female",
+          scores: { sweet: 3, soft: 2, sunny: 1 },
+          tags: ["白色", "泡泡裤", "甜美"]
+        },
+        {
+          id: "sanfu_female_light_denim_drawstring_pants",
+          brandName: "三福打褶抽绳莱赛尔牛仔裤（女款）",
+          shortName: "女款莱赛尔牛仔裤",
+          emoji: "👖",
+          img: "assets/clothes/bottoms/sanfu_female_light_denim_drawstring_pants.png",
+          gender: "female",
+          scores: { casual: 3, cool: 1, sunny: 1 },
+          tags: ["牛仔", "阔腿", "抽绳"]
+        },
+        {
+          id: "sanfu_female_black_strappy_dress",
+          brandName: "三福两侧可调节绑带A型娃娃裙子（黑色女款）",
+          shortName: "黑色A型娃娃裙",
+          emoji: "🖤",
+          img: "assets/clothes/bottoms/sanfu_female_black_strappy_dress.png",
+          gender: "female",
+          scores: { cool: 3, literary: 1 },
+          tags: ["黑色", "吊带", "甜酷"]
+        },
+        {
+          id: "sanfu_female_iceblue_wide_leg_pants",
+          brandName: "三福浅色系宽松阔腿裤（女士）",
+          shortName: "浅色系阔腿裤",
+          emoji: "👖",
+          img: "assets/clothes/bottoms/sanfu_female_iceblue_wide_leg_pants.png",
+          gender: "female",
+          scores: { soft: 2, casual: 2, sunny: 1 },
+          tags: ["冰蓝", "宽腿", "松弛"]
+        },
+        {
+          id: "sanfu_female_burgundy_cargo_pants",
+          brandName: "三福工装风松紧腰宽松直筒阔腿裤（女士）",
+          shortName: "女款工装阔腿裤",
+          emoji: "🧩",
+          img: "assets/clothes/bottoms/sanfu_female_burgundy_cargo_pants.png",
+          gender: "female",
+          scores: { cool: 3, street: 2, sporty: 1 },
+          tags: ["酒红", "工装", "酷感"]
+        }
+      ],
+      shoes: [
+        {
+          id: "sanfu_female_blue_white_sneakers",
+          brandName: "三福盐系漫游多彩拼接复古跑鞋（女款）",
+          shortName: "多彩复古跑鞋",
+          emoji: "👟",
+          img: "assets/clothes/shoes/sanfu_female_blue_white_sneakers.png",
+          gender: "female",
+          scores: { sunny: 2, sporty: 2, soft: 1 },
+          tags: ["蓝白", "运动", "清爽"]
+        },
+        {
+          id: "sanfu_female_black_buckle_mary_janes",
+          brandName: "三福甜酷金属扣交叉绑带方头娃娃鞋",
+          shortName: "金属扣娃娃鞋",
+          emoji: "👞",
+          img: "assets/clothes/shoes/sanfu_female_black_buckle_mary_janes.png",
+          gender: "female",
+          scores: { cool: 3, sweet: 1, literary: 1 },
+          tags: ["黑色", "搭扣", "甜酷"]
+        },
+        {
+          id: "sanfu_female_red_cartoon_sneakers",
+          brandName: "三福凯蒂猫萌脸半拖（女士）",
+          shortName: "凯蒂猫半拖",
+          emoji: "👟",
+          img: "assets/clothes/shoes/sanfu_female_red_cartoon_sneakers.png",
+          gender: "female",
+          scores: { sweet: 3, sunny: 2, sporty: 1 },
+          tags: ["红白", "卡通", "元气"]
+        },
+        {
+          id: "sanfu_female_black_canvas_sneakers",
+          brandName: "三福复古校园撞色缝线帆布鞋（女款）",
+          shortName: "校园帆布鞋",
+          emoji: "👟",
+          img: "assets/clothes/shoes/sanfu_female_black_canvas_sneakers.png",
+          gender: "female",
+          scores: { cool: 2, casual: 2, street: 1 },
+          tags: ["黑色", "帆布", "百搭"]
+        },
+        {
+          id: "sanfu_male_blue_white_sneakers",
+          brandName: "三福盐系漫游多彩拼接复古跑鞋（男款）",
+          shortName: "男款复古跑鞋",
+          emoji: "👟",
+          img: "assets/clothes/shoes/sanfu_male_blue_white_sneakers.png",
+          gender: "male",
+          scores: { sunny: 2, sporty: 2, casual: 1 },
+          tags: ["蓝白", "运动", "清爽"]
+        },
+        {
+          id: "sanfu_male_beige_buckle_mules",
+          brandName: "三福复古绒面圆头勃肯鞋（男士）",
+          shortName: "绒面勃肯鞋",
+          emoji: "👞",
+          img: "assets/clothes/shoes/sanfu_male_beige_buckle_mules.png",
+          gender: "male",
+          scores: { soft: 2, casual: 2, literary: 1 },
+          tags: ["米杏", "搭扣", "松弛"]
+        },
+        {
+          id: "sanfu_male_black_chunky_sneakers",
+          brandName: "三福街头透气网面橡胶底老爹鞋",
+          shortName: "网面老爹鞋",
+          emoji: "👟",
+          img: "assets/clothes/shoes/sanfu_male_black_chunky_sneakers.png",
+          gender: "male",
+          scores: { cool: 3, sporty: 2, street: 1 },
+          tags: ["黑白", "厚底", "运动"]
+        },
+        {
+          id: "sanfu_male_black_canvas_sneakers",
+          brandName: "三福复古校园撞色缝线帆布鞋（男款）",
+          shortName: "男款校园帆布鞋",
+          emoji: "👟",
+          img: "assets/clothes/shoes/sanfu_male_black_canvas_sneakers.png",
+          gender: "male",
+          scores: { casual: 3, street: 1, cool: 1 },
+          tags: ["黑色", "帆布", "百搭"]
+        }
+      ],
+      accessory: [
+        {
+          id: "sanfu_black_leather_belt",
+          brandName: "三福复古摔纹针扣双车线铆钉圆头腰带",
+          shortName: "针扣铆钉腰带",
+          emoji: "◼️",
+          img: "assets/clothes/accessories/sanfu_black_leather_belt.png",
+          scores: { cool: 2, street: 1, casual: 1 },
+          tags: ["腰部", "皮质", "利落"]
+        },
+        {
+          id: "sanfu_black_star_handbag",
+          brandName: "三福复古风五角星挂饰波士顿包（女士）",
+          shortName: "五角星波士顿包",
+          emoji: "👜",
+          img: "assets/clothes/accessories/sanfu_black_star_handbag.png",
+          gender: "female",
+          scores: { cool: 2, sweet: 1, street: 1 },
+          tags: ["手提", "星星", "甜酷"]
+        },
+        {
+          id: "sanfu_blue_kitty_tote",
+          brandName: "三福三丽鸥装饰袋（女士）",
+          shortName: "三丽鸥装饰袋",
+          emoji: "🛍️",
+          img: "assets/clothes/accessories/sanfu_blue_kitty_tote.png",
+          gender: "female",
+          scores: { sweet: 3, sunny: 2, casual: 1 },
+          tags: ["托特", "格纹", "元气"]
+        },
+        {
+          id: "sanfu_blue_cat_charm",
+          brandName: "三福潮流钥匙挂件",
+          shortName: "潮流钥匙挂件",
+          emoji: "🔗",
+          img: "assets/clothes/accessories/sanfu_blue_cat_charm.png",
+          scores: { sweet: 2, sunny: 1, casual: 1 },
+          tags: ["挂件", "可爱", "点缀"]
+        },
+        {
+          id: "sanfu_bear_charm",
+          brandName: "三福轻松小熊挂件",
+          shortName: "轻松小熊挂件",
+          emoji: "🔗",
+          img: "assets/clothes/accessories/sanfu_bear_charm.png",
+          scores: { soft: 2, sweet: 1, casual: 1 },
+          tags: ["挂件", "软萌", "点缀"]
+        }
+      ]
+    };
+
+    const CLOTHING_FIT_CONFIG = {
+      sanfu_cream_bucket_hat: { x: 0, y: 0, scale: 1, rotation: 0, zIndex: 7, opacity: 1, visible: true },
+      sanfu_navy_script_cap: { x: 0, y: 0, scale: 1, rotation: 0, zIndex: 7, opacity: 1, visible: true },
+      sanfu_brown_newsboy_cap: { x: 0, y: 0, scale: 1, rotation: 0, zIndex: 7, opacity: 1, visible: true },
+      sanfu_mesh_bucket_hat: { x: 0, y: 0, scale: 1, rotation: 0, zIndex: 7, opacity: 1, visible: true },
+
+      sanfu_male_gray_navy_polo: { x: 2, y: -67, scale: 0.82, rotation: 0, zIndex: 6, opacity: 1, visible: true },
+      sanfu_male_blue_striped_layer_top: { x: 2, y: -67, scale: 0.79, rotation: 0, zIndex: 6, opacity: 1, visible: true },
+      sanfu_male_brown_contrast_tshirt: { x: 2, y: -67, scale: 0.79, rotation: 0, zIndex: 6, opacity: 1, visible: true },
+      sanfu_male_white_doraemon_tshirt: { x: 2, y: -67, scale: 0.79, rotation: 0, zIndex: 6, opacity: 1, visible: true },
+      sanfu_female_red_striped_layer_top: { x: -3, y: -125, scale: 1.0, rotation: 0, zIndex: 3, opacity: 1, visible: true },
+
+      sanfu_blue_bow_varsity_jacket: { x: 2, y: -36, scale: 0.86, rotation: 0, zIndex: 8, opacity: 1, visible: true },
+      sanfu_burgundy_sport_jacket: { x: 2, y: -36, scale: 0.86, rotation: 0, zIndex: 8, opacity: 1, visible: true },
+      sanfu_navy_hooded_jacket: { x: 2, y: -36, scale: 0.86, rotation: 0, zIndex: 8, opacity: 1, visible: true },
+      sanfu_cream_windbreaker: { x: 2, y: -36, scale: 0.86, rotation: 0, zIndex: 8, opacity: 1, visible: true },
+      sanfu_pink_hoodie_jacket: { x: 2, y: -36, scale: 0.86, rotation: 0, zIndex: 8, opacity: 1, visible: true },
+
+      sanfu_male_beige_drawstring_wide_pants: { x: 1, y: -18, scale: 1.04, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_male_white_cargo_shorts: { x: 1, y: -18, scale: 1.04, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_male_light_denim_jogger_pants: { x: 6, y: -18, scale: 1.04, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_male_gray_drawstring_wide_pants: { x: 1, y: -18, scale: 1.04, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_male_burgundy_cargo_pants: { x: 1, y: -18, scale: 1.04, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_female_white_bubble_shorts: { x: -1, y: -37, scale: 0.98, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_female_light_denim_drawstring_pants: { x: -1, y: -37, scale: 0.98, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_female_black_strappy_dress: { x: -1, y: -35, scale: 0.97, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_female_iceblue_wide_leg_pants: { x: -1, y: -37, scale: 1.04, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+      sanfu_female_burgundy_cargo_pants: { x: -1, y: -37, scale: 0.98, rotation: 0, zIndex: 4, opacity: 1, visible: true },
+
+      sanfu_female_blue_white_sneakers: { x: 5, y: -148, scale: 1.5, rotation: 0, zIndex: 3, opacity: 1, visible: true },
+      sanfu_female_black_buckle_mary_janes: { x: 5, y: -64, scale: 1.2, rotation: 0, zIndex: 3, opacity: 1, visible: true },
+      sanfu_female_red_cartoon_sneakers: { x: 5, y: -64, scale: 1.2, rotation: 0, zIndex: 3, opacity: 1, visible: true },
+      sanfu_female_black_canvas_sneakers: { x: 5, y: -176, scale: 1.6, rotation: 0, zIndex: 3, opacity: 1, visible: true },
+      sanfu_male_blue_white_sneakers: { x: 2, y: -168, scale: 1.59, rotation: 0, zIndex: 3, opacity: 1, visible: true },
+      sanfu_male_beige_buckle_mules: { x: 1, y: -16, scale: 1.04, rotation: 0, zIndex: 3, opacity: 1, visible: true },
+      sanfu_male_black_chunky_sneakers: { x: 2, y: -168, scale: 1.59, rotation: 0, zIndex: 3, opacity: 1, visible: true },
+      sanfu_male_black_canvas_sneakers: { x: 2, y: -168, scale: 1.59, rotation: 0, zIndex: 3, opacity: 1, visible: true }
+    };
+
+
+
+    const MALE_ROLE_IDS = ["sunnyboy", "softboy", "streetboy"];
+    const FEMALE_ROLE_IDS = ["sweet", "coolgirl", "artist"];
+    const MALE_COAT_FIT_CONFIG = {
+      x: 2,
+      y: -28,
+      scale: 0.97,
+      rotation: 0,
+      zIndex: 8,
+      opacity: 1,
+      visible: true
+    };
+    const MALE_HAT_FIT_CONFIG = {
+      x: 1,
+      y: -69,
+      scale: 0.79,
+      rotation: 0,
+      zIndex: 7,
+      opacity: 1,
+      visible: true
+    };
+    const SUNNYBOY_HAT_FIT_CONFIG = {
+      ...MALE_HAT_FIT_CONFIG,
+      y: -73
+    };
+    const FEMALE_HAT_FIT_CONFIG = {
+      sweet: { x: 0, y: -40, scale: 0.92, rotation: 0, zIndex: 7, opacity: 1, visible: true },
+      coolgirl: { x: 2, y: -51, scale: 0.81, rotation: 0, zIndex: 7, opacity: 1, visible: true },
+      artist: { x: -1, y: -45, scale: 0.88, rotation: 0, zIndex: 7, opacity: 1, visible: true }
+    };
+    const FEMALE_TOP_FIT_CONFIG = {
+      x: -1,
+      y: -67,
+      scale: 0.79,
+      rotation: 0,
+      zIndex: 6,
+      opacity: 1,
+      visible: true
+    };
+    const ROLE_TOP_FIT_CONFIG = {
+      sanfu_female_red_striped_layer_top: {
+        coolgirl: { x: -6, y: -120, scale: 0.98, rotation: 0, zIndex: 3, opacity: 1, visible: true }
+      }
+    };
+    const ACCESSORY_FIT_CONFIG = {
+      sanfu_black_leather_belt: {
+        female: { x: 1, y: -48, scale: 0.71, rotation: 0, zIndex: 5, opacity: 1, visible: true },
+        male: { x: 1, y: -25, scale: 0.86, rotation: 0, zIndex: 5, opacity: 1, visible: true }
+      },
+      sanfu_black_star_handbag: {
+        female: { x: 31, y: 2, scale: 0.85, rotation: 0, zIndex: 5, opacity: 1, visible: true },
+        male: { x: 18, y: 0, scale: 0.95, rotation: 0, zIndex: 5, opacity: 1, visible: true }
+      },
+      sanfu_blue_kitty_tote: {
+        female: { x: 31, y: 2, scale: 0.85, rotation: 0, zIndex: 5, opacity: 1, visible: true },
+        male: { x: 16, y: 2, scale: 0.92, rotation: 0, zIndex: 5, opacity: 1, visible: true }
+      },
+      sanfu_blue_cat_charm: {
+        female: { x: -12, y: -20, scale: 0.71, rotation: 0, zIndex: 5, opacity: 1, visible: true },
+        male: { x: -5, y: 25, scale: 0.71, rotation: 0, zIndex: 5, opacity: 1, visible: true }
+      },
+      sanfu_bear_charm: {
+        female: { x: -12, y: -20, scale: 0.71, rotation: 0, zIndex: 5, opacity: 1, visible: true },
+        male: { x: -5, y: 25, scale: 0.71, rotation: 0, zIndex: 5, opacity: 1, visible: true }
+      }
+    };
+    /* =========================================================
+      5. 人格结果配置
+      ========================================================= */
+    const RESULT_CONFIG = {
+      sweet: {
+        title: "元气甜心开局者",
+        subtitle: "你的穿搭人格：甜趣氛围担当",
+        desc: "你的搭配像一颗会发光的糖果，明亮、亲近、很会制造好心情。你擅长用颜色和可爱细节把普通日常变成出片时刻。",
+        keywords: ["甜感加分", "可爱出片", "亲和力爆棚"],
+        recommend: "推荐选择三福亮色上衣、软萌配饰、半身裙或厚底鞋，用一个小亮点把整套 look 主起来。",
+        emojis: ["🍓", "💎", "👗", "✨"],
+        share: "我测出了【元气甜心开局者】！甜趣好搭，今天这局我先可爱为敬～"
+      },
+      cool: {
+        title: "街头酷感主理人",
+        subtitle: "你的穿搭人格：气场控场玩家",
+        desc: "你不喜欢被定义，穿搭就是你的态度宣言。你偏爱有线条、有反差、有存在感的单品。",
+        keywords: ["酷感态度", "街头主理", "反差出圈"],
+        recommend: "推荐选择三福皮衣、牛仔外套、工装裤、短靴或金属感配饰，轻松拿捏街头潮酷感。",
+        emojis: ["🕶️", "🔥", "🥾", "⚡"],
+        share: "我测出了【街头酷感主理人】！不跟风，我的穿搭自己主局。"
+      },
+      literary: {
+        title: "松弛文艺氛围家",
+        subtitle: "你的穿搭人格：故事感穿搭玩家",
+        desc: "你的搭配不一定高调，但一定耐看。你擅长用衬衫、大衣、围巾、小皮鞋制造柔和层次。",
+        keywords: ["文艺滤镜", "温柔叠穿", "耐看氛围"],
+        recommend: "推荐选择三福衬衫、氛围大衣、贝雷帽和围巾，用同色系或低饱和搭配打造质感。",
+        emojis: ["🎨", "🧣", "👞", "📖"],
+        share: "我测出了【松弛文艺氛围家】！我的穿搭不喧哗，但很有故事。"
+      },
+      casual: {
+        title: "随性好搭行动派",
+        subtitle: "你的穿搭人格：日常局万能队友",
+        desc: "你相信舒服也是一种时髦。不需要费力凹造型，也能把基础款穿得清爽耐看。",
+        keywords: ["舒服耐看", "百搭不费力", "日常万能"],
+        recommend: "推荐选择三福休闲裤、牛仔裤、基础 T 恤、渔夫帽和斜挎包，打造好穿又好看的日常搭配。",
+        emojis: ["👕", "👖", "👜", "🌿"],
+        share: "我测出了【随性好搭行动派】！舒服、好看、不费力，这局我稳稳拿下。"
+      },
+      sunny: {
+        title: "阳光元气召集人",
+        subtitle: "你的穿搭人格：青春感气氛组",
+        desc: "你的风格干净清爽，像随时能把朋友喊出门玩的一束光。适合运动感、校园感和亮色基础款。",
+        keywords: ["青春清爽", "活力在线", "朋友局召集人"],
+        recommend: "推荐选择三福棒球帽、印花 T 恤、运动鞋和棒球夹克，轻松搭出校园活力感。",
+        emojis: ["☀️", "🧢", "👟", "🏁"],
+        share: "我测出了【阳光元气召集人】！今天这局，我负责把大家喊出来玩。"
+      },
+      sporty: {
+        title: "活力潮玩气氛组",
+        subtitle: "你的穿搭人格：说走就走玩家",
+        desc: "你偏爱轻松、机能、能动起来的搭配。不只是穿得好看，还要穿得自在。",
+        keywords: ["运动潮玩", "自由切换", "能量满格"],
+        recommend: "推荐选择三福运动鞋、棒球夹克、短款卫衣和工装裤，让整套搭配更有节奏感。",
+        emojis: ["👟", "🏃", "⚡", "🧩"],
+        share: "我测出了【活力潮玩气氛组】！随时出发，随时主局。"
+      },
+      soft: {
+        title: "治愈松弛陪伴者",
+        subtitle: "你的穿搭人格：温暖好感系",
+        desc: "你的搭配像一杯刚刚好的热饮，舒服、自然、有亲和力，是三福衣柜里的温暖好搭子。",
+        keywords: ["温暖松弛", "柔和好感", "自然耐看"],
+        recommend: "推荐选择三福针织毛衣、休闲裤、小皮鞋和暖色配饰，搭出轻松又有质感的日常。",
+        emojis: ["🌿", "🧶", "👞", "☁️"],
+        share: "我测出了【治愈松弛陪伴者】！温暖好搭，这局舒服最重要。"
+      },
+      street: {
+        title: "街头机能探索家",
+        subtitle: "你的穿搭人格：潮酷路线开拓者",
+        desc: "你喜欢让穿搭带一点行动感和边界感。外套、工装裤、运动鞋和金属细节在你身上不是装饰，而是表达态度的装备。",
+        keywords: ["街头机能", "酷感装备", "态度出街"],
+        recommend: "推荐选择三福夹克、工装裤、棒球帽和厚底运动鞋，让整套 look 更有城市探索感。",
+        emojis: ["🧢", "🛹", "🥾", "⚡"],
+        share: "我测出了【街头机能探索家】！潮酷不是端着，是随时能出发。"
+      },
+      campus: {
+        title: "校园清爽搭子",
+        subtitle: "你的穿搭人格：新学期好感玩家",
+        desc: "你擅长把干净、清爽、好接近穿在身上。你的造型不抢戏，却很容易给人留下舒服的第一印象。",
+        keywords: ["校园清爽", "第一眼好感", "好接近"],
+        recommend: "推荐选择三福条纹上衣、浅色下装、帆布鞋和棒球帽，搭出轻松自然的校园好感。",
+        emojis: ["🎒", "📘", "👟", "☀️"],
+        share: "我测出了【校园清爽搭子】！开学第一面，轻松搭出好印象。"
+      },
+      social: {
+        title: "社交出片氛围王",
+        subtitle: "你的穿搭人格：朋友局镜头担当",
+        desc: "你很会让穿搭成为社交开场。颜色、图案、包包或鞋帽总有一个记忆点，随手拍也能有故事。",
+        keywords: ["朋友局焦点", "随手出片", "话题开场"],
+        recommend: "推荐选择三福亮色上衣、造型外套、趣味包袋和有存在感的鞋子，把普通聚会搭成出片现场。",
+        emojis: ["📸", "🎧", "👜", "✨"],
+        share: "我测出了【社交出片氛围王】！今天这局，我负责好看又好聊。"
+      },
+      gift: {
+        title: "甜趣送礼策划师",
+        subtitle: "你的穿搭人格：情绪价值制造者",
+        desc: "你很懂把心意变得看得见。你的搭配常常有一点甜、一点亮，也有一点精心准备过的小惊喜。",
+        keywords: ["甜趣心意", "礼物灵感", "情绪价值"],
+        recommend: "推荐选择三福软萌配饰、亮色包袋、可爱图案单品和浅色鞋履，让搭配自带送礼氛围。",
+        emojis: ["🎁", "💗", "👜", "🌟"],
+        share: "我测出了【甜趣送礼策划师】！好搭也好送，把心意搭得看得见。"
+      },
+      hobby: {
+        title: "潮玩兴趣收藏家",
+        subtitle: "你的穿搭人格：圈层暗号玩家",
+        desc: "你的穿搭里藏着自己的兴趣暗号。挂件、卡通图案、包包和特别的鞋帽，都是你和同频搭子互相认出的方式。",
+        keywords: ["圈层暗号", "潮玩点睛", "同好识别"],
+        recommend: "推荐选择三福潮玩挂件、IP 图案上衣、趣味包袋和反差鞋款，让爱好成为造型里的隐藏彩蛋。",
+        emojis: ["🧩", "🔑", "🎮", "💫"],
+        share: "我测出了【潮玩兴趣收藏家】！我的穿搭里，有同频搭子一眼能懂的暗号。"
+      }
+    };
+
+    /* =========================================================
+      6. 状态管理
+      ========================================================= */
+    const state = {
+      sceneId: SCENE_CONFIG[0].id,
+      roleId: ROLE_CONFIG[0].id,
+      categoryId: CATEGORY_CONFIG[0].id,
+      selectedClothes: {}
+    };
+
+    const EMPTY_SELECTION_ID = "__empty__";
+
+    const dom = {
+      sceneGrid: document.getElementById("sceneGrid"),
+      roleGrid: document.getElementById("roleGrid"),
+      stage: document.getElementById("stage"),
+      stageDeco: document.getElementById("stageDeco"),
+      avatarWrap: document.getElementById("avatarWrap"),
+      baseAvatar: document.getElementById("baseAvatar"),
+      avatarMissing: document.getElementById("avatarMissing"),
+      roleTag: document.getElementById("roleTag"),
+      moodText: document.getElementById("moodText"),
+      tabs: document.getElementById("tabs"),
+      optionList: document.getElementById("optionList"),
+      buddyTip: document.getElementById("buddyTip"),
+      progressTip: document.getElementById("progressTip"),
+      comboStrip: document.getElementById("comboStrip"),
+      generateBtn: document.getElementById("generateBtn"),
+      resultModal: document.getElementById("resultModal"),
+      posterScene: document.getElementById("posterScene"),
+      resultTitle: document.getElementById("resultTitle"),
+      resultSubtitle: document.getElementById("resultSubtitle"),
+      resultDesc: document.getElementById("resultDesc"),
+      posterVisual: document.getElementById("posterVisual"),
+      outfitPlanText: document.getElementById("outfitPlanText"),
+      keywordList: document.getElementById("keywordList"),
+      recommendText: document.getElementById("recommendText"),
+      shareCopy: document.getElementById("shareCopy"),
+      toast: document.getElementById("toast"),
+      bgmAudio: document.getElementById("bgmAudio"),
+      musicToggle: document.getElementById("musicToggle")
+    };
+
+    let lastShareText = "";
+    let wardrobeOpening = false;
+    let musicEnabled = true;
+
+    init();
+
+    function enterGame() {
+      document.getElementById("openingScreen").classList.add("is-hidden");
+      document.body.classList.add("game-started");
+    }
+
+    function updateMusicToggle() {
+      const isPlaying = !dom.bgmAudio.paused;
+      dom.musicToggle.innerText = isPlaying ? "音乐 开" : "音乐 关";
+      dom.musicToggle.setAttribute("aria-pressed", isPlaying ? "true" : "false");
+    }
+
+    function startBgm() {
+      if (!musicEnabled) return;
+      dom.bgmAudio.volume = 0.42;
+      dom.bgmAudio.play()
+        .then(updateMusicToggle)
+        .catch(updateMusicToggle);
+    }
+
+    function toggleMusic() {
+      if (dom.bgmAudio.paused) {
+        musicEnabled = true;
+        startBgm();
+        showToast("BGM已开启");
+      } else {
+        musicEnabled = false;
+        dom.bgmAudio.pause();
+        showToast("BGM已关闭");
+      }
+      updateMusicToggle();
+    }
+
+    function playWardrobeOpen() {
+      if (wardrobeOpening) return;
+      wardrobeOpening = true;
+      startBgm();
+      document.getElementById("openingScreen").classList.add("is-opening");
+      window.setTimeout(enterGame, 1150);
+    }
+
+    document.getElementById("wardrobeOpenBtn").addEventListener("click", playWardrobeOpen);
+    document.getElementById("openingHintBtn").addEventListener("click", playWardrobeOpen);
+    dom.musicToggle.addEventListener("click", toggleMusic);
+    updateMusicToggle();
+
+    if (new URLSearchParams(window.location.search).get("start") === "1") {
+      enterGame();
+    }
+
+    function init() {
+      renderScenes();
+      renderRoles();
+      renderTabs();
+      renderOptions();
+      updateRoleVisual();
+      updateProgress();
+      bindEvents();
+    }
+
+    function bindEvents() {
+      dom.generateBtn.addEventListener("click", handleGenerateResult);
+      document.getElementById("continueBtn").addEventListener("click", () => dom.resultModal.style.display = "none");
+      document.getElementById("resetBtn").addEventListener("click", resetGame);
+      document.getElementById("shareBtn").addEventListener("click", copyShareText);
+      enableDragScroll(dom.tabs);
+      enableDragScroll(dom.optionList);
+    }
+
+    function enableDragScroll(scroller) {
+      let startX = 0;
+      let startScrollLeft = 0;
+      let isDragging = false;
+      let hasMoved = false;
+
+      scroller.addEventListener("pointerdown", event => {
+        if (event.pointerType === "touch") return;
+        isDragging = true;
+        hasMoved = false;
+        startX = event.clientX;
+        startScrollLeft = scroller.scrollLeft;
+      });
+
+      scroller.addEventListener("pointermove", event => {
+        if (!isDragging) return;
+        const deltaX = event.clientX - startX;
+        if (Math.abs(deltaX) <= 8) return;
+        scroller.scrollLeft = startScrollLeft - deltaX;
+        hasMoved = true;
+        scroller.classList.add("dragging");
+        event.preventDefault();
+      });
+
+      const endDrag = event => {
+        if (!isDragging) return;
+        isDragging = false;
+        scroller.classList.remove("dragging");
+        if (hasMoved) {
+          scroller.dataset.dragged = "true";
+          setTimeout(() => delete scroller.dataset.dragged, 160);
+        }
+      };
+
+      scroller.addEventListener("pointerup", endDrag);
+      scroller.addEventListener("pointercancel", endDrag);
+      scroller.addEventListener("lostpointercapture", () => {
+        isDragging = false;
+        scroller.classList.remove("dragging");
+      });
+
+      scroller.addEventListener("click", event => {
+        if (scroller.dataset.dragged === "true") {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }, true);
+    }
+
+    function getCurrentRole() {
+      return ROLE_CONFIG.find(role => role.id === state.roleId);
+    }
+
+    function getCurrentScene() {
+      return SCENE_CONFIG.find(scene => scene.id === state.sceneId);
+    }
+
+    function getRoleGender(roleId = state.roleId) {
+      if (FEMALE_ROLE_IDS.includes(roleId)) return "female";
+      if (MALE_ROLE_IDS.includes(roleId)) return "male";
+      return "unisex";
+    }
+
+    function itemMatchesRole(item, roleId = state.roleId) {
+      if (!item.gender || item.gender === "unisex") return true;
+      const gender = getRoleGender(roleId);
+      return Array.isArray(item.gender) ? item.gender.includes(gender) : item.gender === gender;
+    }
+
+    function getAvailableClothing(categoryId, roleId = state.roleId) {
+      return (CLOTHING_CONFIG[categoryId] || []).filter(item => itemMatchesRole(item, roleId));
+    }
+
+    function getCurrentCategory() {
+      return CATEGORY_CONFIG.find(category => category.id === state.categoryId);
+    }
+
+    function getSelectedClothing(categoryId) {
+      const itemId = state.selectedClothes[categoryId];
+      if (!itemId || itemId === EMPTY_SELECTION_ID) return null;
+      return getAvailableClothing(categoryId).find(item => item.id === itemId);
+    }
+
+    function hasCategoryChoice(categoryId) {
+      return state.selectedClothes[categoryId] === EMPTY_SELECTION_ID || Boolean(getSelectedClothing(categoryId));
+    }
+
+    function clearLayer(categoryId) {
+      const category = CATEGORY_CONFIG.find(item => item.id === categoryId);
+      if (!category) return;
+      const layer = document.getElementById(category.layerId);
+      const shell = layer.closest(".wear-shell") || layer;
+      const chip = document.getElementById(category.chipId);
+      shell.classList.remove("active");
+      layer.classList.remove("active");
+      layer.removeAttribute("src");
+      if (chip) chip.style.display = "none";
+    }
+
+    function removeUnavailableSelections() {
+      CATEGORY_CONFIG.forEach(category => {
+        const selectedId = state.selectedClothes[category.id];
+        if (selectedId && selectedId !== EMPTY_SELECTION_ID && !getSelectedClothing(category.id)) {
+          delete state.selectedClothes[category.id];
+          clearLayer(category.id);
+        }
+      });
+    }
+
+    function getClothingThumb(item) {
+      return item.thumb || item.img.replace("assets/clothes/", "assets/clothes_thumbs/");
+    }
+
+    /* =========================================================
+      7. 渲染：场景与角色
+      ========================================================= */
+    function renderScenes() {
+      dom.sceneGrid.innerHTML = SCENE_CONFIG.map(scene => `
+        <button class="scene-card ${scene.id === state.sceneId ? "active" : ""}" data-scene-id="${scene.id}" style="--scene-bg:${scene.bg}">
+          <div class="scene-emoji">${scene.emoji}</div>
+          <div class="scene-name">${scene.name}</div>
+          <div class="scene-desc">${scene.desc}</div>
+        </button>
+      `).join("");
+
+      dom.sceneGrid.querySelectorAll(".scene-card").forEach(card => {
+        card.addEventListener("click", () => {
+          state.sceneId = card.dataset.sceneId;
+          renderScenes();
+          updateProgress();
+          showToast(`${getCurrentScene().name}已开局，开始搭出生活感！`);
+        });
+      });
+    }
+
+    function renderRoles() {
+      dom.roleGrid.innerHTML = ROLE_CONFIG.map(role => `
+        <button class="role-card ${role.id === state.roleId ? "active" : ""}" data-role-id="${role.id}" style="--role-glow:${role.glow}">
+          <div class="role-info">
+            <div class="role-emoji">${role.emoji}</div>
+            <div class="role-name">${role.name}</div>
+            <div class="role-desc">${role.desc}</div>
+          </div>
+          <img class="role-thumb" src="${role.avatar}" alt="${role.name}" onerror="this.style.display='none'" />
+        </button>
+      `).join("");
+
+      dom.roleGrid.querySelectorAll(".role-card").forEach(card => {
+        card.addEventListener("click", () => {
+          state.roleId = card.dataset.roleId;
+          renderRoles();
+          updateRoleVisual();
+          showToast(`已选择${getCurrentRole().name}，开始主个局！`);
+        });
+      });
+    }
+
+    function updateRoleVisual() {
+      const role = getCurrentRole();
+      dom.avatarWrap.classList.remove("switching");
+      void dom.avatarWrap.offsetWidth;
+      dom.avatarWrap.classList.add("switching");
+
+      dom.baseAvatar.src = role.avatar;
+      dom.baseAvatar.alt = role.name;
+      dom.baseAvatar.style.display = "block";
+      dom.avatarMissing.style.display = "none";
+      dom.baseAvatar.onerror = () => {
+        dom.baseAvatar.style.display = "none";
+        dom.avatarMissing.style.display = "flex";
+      };
+
+      dom.roleTag.innerText = role.name;
+      dom.moodText.innerText = role.mood;
+      dom.stage.style.setProperty("--stage-a", role.stageColors[0]);
+      dom.stage.style.setProperty("--stage-b", role.stageColors[1]);
+      dom.stageDeco.innerHTML = role.deco.map(text => `<span>${text}</span>`).join("");
+    }
+
+    /* =========================================================
+      8. 渲染：分类与服饰
+      ========================================================= */
+    function renderTabs() {
+      dom.tabs.innerHTML = CATEGORY_CONFIG.map(category => `
+        <button class="tab-btn ${category.id === state.categoryId ? "active" : ""}" data-category-id="${category.id}">${category.name}</button>
+      `).join("");
+
+      dom.tabs.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.categoryId = btn.dataset.categoryId;
+          renderTabs();
+          renderOptions();
+        });
+      });
+    }
+
+    function renderOptions() {
+      const categoryId = state.categoryId;
+      const clothes = getAvailableClothing(categoryId);
+
+      const emptyOption = `
+        <button class="option-btn ${state.selectedClothes[categoryId] === EMPTY_SELECTION_ID ? "active" : ""}" data-item-id="${EMPTY_SELECTION_ID}">
+          <div class="option-icon option-empty-icon">空</div>
+          <span>这局留白</span>
+        </button>
+      `;
+
+      const clothingOptions = clothes.map(item => `
+        <button class="option-btn ${state.selectedClothes[categoryId] === item.id ? "active" : ""}" data-item-id="${item.id}">
+          <div class="option-icon">
+            <img src="${getClothingThumb(item)}" alt="${item.shortName}" onerror="this.src='${item.img}'" />
+          </div>
+          <span>${item.shortName}</span>
+        </button>
+      `).join("");
+
+      dom.optionList.innerHTML = emptyOption + clothingOptions;
+
+      dom.optionList.querySelectorAll(".option-btn").forEach(btn => {
+        btn.addEventListener("click", () => selectClothing(categoryId, btn.dataset.itemId));
+      });
+    }
+
+    function selectClothing(categoryId, itemId) {
+      state.selectedClothes[categoryId] = itemId;
+      if (itemId === EMPTY_SELECTION_ID) {
+        clearLayer(categoryId);
+        renderOptions();
+        updateProgress();
+        showToast(`${getCurrentCategory().name}先留白，这局也可以轻松搭。`);
+        return;
+      }
+      applyLayer(categoryId);
+      renderOptions();
+      updateProgress();
+      const clothing = getSelectedClothing(categoryId);
+      if (clothing) showToast(`已加入${clothing.shortName}，这局更有感觉了。`);
+    }
+
+    function getAccessoryFitConfig(clothingId, roleId) {
+      const fitGroup = ACCESSORY_FIT_CONFIG[clothingId];
+      if (!fitGroup) return CLOTHING_FIT_CONFIG[clothingId];
+      const gender = getRoleGender(roleId);
+      return fitGroup[gender] || fitGroup.default || CLOTHING_FIT_CONFIG[clothingId];
+    }
+
+    function getTopFitConfig(clothingId, roleId) {
+      const roleFit = ROLE_TOP_FIT_CONFIG[clothingId]?.[roleId];
+      return roleFit || CLOTHING_FIT_CONFIG[clothingId] || FEMALE_TOP_FIT_CONFIG;
+    }
+
+    function applyLayerFit(layer, categoryId, clothingId) {
+      const shell = layer.closest(".wear-shell") || layer;
+
+      shell.style.left = "";
+      shell.style.top = "";
+      shell.style.width = "";
+      shell.style.height = "";
+      shell.style.bottom = "";
+      shell.style.zIndex = "";
+      shell.style.visibility = "";
+      shell.style.removeProperty("--fit-x");
+      shell.style.removeProperty("--fit-y");
+
+      layer.style.left = "";
+      layer.style.top = "";
+      layer.style.width = "";
+      layer.style.height = "";
+      layer.style.bottom = "";
+      layer.style.transform = "";
+      layer.style.opacity = "";
+      layer.style.removeProperty("--fit-scale");
+      layer.style.removeProperty("--fit-rotation");
+      layer.style.removeProperty("--fit-opacity");
+
+      const fit = categoryId === "coat" && MALE_ROLE_IDS.includes(state.roleId)
+        ? MALE_COAT_FIT_CONFIG
+        : categoryId === "top" && FEMALE_ROLE_IDS.includes(state.roleId)
+          ? getTopFitConfig(clothingId, state.roleId)
+        : categoryId === "hat" && state.roleId === "sunnyboy"
+          ? SUNNYBOY_HAT_FIT_CONFIG
+        : categoryId === "hat" && MALE_ROLE_IDS.includes(state.roleId)
+          ? MALE_HAT_FIT_CONFIG
+        : categoryId === "hat" && FEMALE_ROLE_IDS.includes(state.roleId)
+          ? FEMALE_HAT_FIT_CONFIG[state.roleId]
+        : categoryId === "accessory"
+          ? getAccessoryFitConfig(clothingId, state.roleId)
+          : CLOTHING_FIT_CONFIG[clothingId];
+      if (!fit || !Object.prototype.hasOwnProperty.call(fit, "x")) return;
+
+      shell.style.setProperty("--fit-x", `${fit.x || 0}px`);
+      shell.style.setProperty("--fit-y", `${fit.y || 0}px`);
+      shell.style.zIndex = String(fit.zIndex ?? 6);
+      shell.style.visibility = fit.visible === false ? "hidden" : "";
+
+      layer.style.setProperty("--fit-scale", fit.scale ?? 1);
+      layer.style.setProperty("--fit-rotation", `${fit.rotation || 0}deg`);
+      layer.style.setProperty("--fit-opacity", fit.opacity ?? 1);
+      layer.style.opacity = String(fit.opacity ?? 1);
+    }
+
+    /* =========================================================
+      9. 图层渲染：服饰 PNG 覆盖
+      ========================================================= */
+    function applyLayer(categoryId) {
+      const category = CATEGORY_CONFIG.find(item => item.id === categoryId);
+      const clothing = getSelectedClothing(categoryId);
+      if (!category) return;
+      if (!clothing) {
+        clearLayer(categoryId);
+        return;
+      }
+
+      const layer = document.getElementById(category.layerId);
+      const shell = layer.closest(".wear-shell") || layer;
+      const chip = document.getElementById(category.chipId);
+
+      shell.classList.remove("active");
+      chip.style.display = "none";
+      chip.innerText = "";
+      applyLayerFit(layer, categoryId, clothing.id);
+
+      layer.src = clothing.img;
+      layer.alt = clothing.brandName;
+
+      layer.onload = () => {
+        chip.style.display = "none";
+        shell.classList.add("active");
+      };
+
+      layer.onerror = () => {
+        shell.classList.remove("active");
+        chip.innerText = `${clothing.emoji} ${clothing.shortName}`;
+        chip.style.display = "inline-flex";
+      };
+    }
+
+    function autoJumpToNextCategory(categoryId) {
+      const index = CATEGORY_CONFIG.findIndex(category => category.id === categoryId);
+      const next = CATEGORY_CONFIG[index + 1];
+      if (!next) return;
+
+      setTimeout(() => {
+        state.categoryId = next.id;
+        renderTabs();
+        renderOptions();
+      }, 260);
+    }
+
+    function updateProgress() {
+      const required = CATEGORY_CONFIG.filter(category => category.required);
+      const count = required.filter(category => hasCategoryChoice(category.id)).length;
+      const missing = required.find(category => !hasCategoryChoice(category.id));
+      const total = required.length;
+      const scene = getCurrentScene();
+
+      dom.generateBtn.classList.toggle("ready", count === total);
+
+      if (count < total) {
+        dom.progressTip.innerText = `已完成 ${count}/${total} 项，继续选择${missing.name}，或把这一类留白。`;
+      } else {
+        dom.progressTip.innerText = "搭配完成！点击按钮，生成你的三福潮趣搭案海报。";
+      }
+      dom.buddyTip.innerHTML = `<strong>三福搭子提示：</strong>${getBuddyTipText(count, missing, scene)}`;
+      renderComboStrip();
+    }
+
+    function getBuddyTipText(count, missing, scene) {
+      if (count === 0) return `${scene.name}已经开局啦。先从一个最想表达心情的单品开始，三福陪你慢慢搭。`;
+      if (missing) return `${scene.mood} 现在还差${missing.name}，也可以留白，让造型更轻松。`;
+      return `${scene.name}搭案完成：服饰、场景和情绪已经连起来了，可以生成海报分享给搭子。`;
+    }
+
+    function getSelectedTagSummary(limit = 4) {
+      const tagSet = new Set();
+      CATEGORY_CONFIG.forEach(category => {
+        const clothing = getSelectedClothing(category.id);
+        if (!clothing || !Array.isArray(clothing.tags)) return;
+        clothing.tags.slice(0, 2).forEach(tag => tagSet.add(tag));
+      });
+      return Array.from(tagSet).slice(0, limit);
+    }
+
+    function renderComboStrip() {
+      const scene = getCurrentScene();
+      const tags = getSelectedTagSummary(3);
+      const selectedCount = CATEGORY_CONFIG.filter(category => Boolean(getSelectedClothing(category.id))).length;
+      const combos = [
+        scene.name,
+        selectedCount >= 2 ? "多品类组合" : "先搭一个重点",
+        ...tags
+      ];
+      dom.comboStrip.innerHTML = combos.map(tag => `<span>${tag}</span>`).join("");
+    }
+
+    /* =========================================================
+      10. 人格算法：场景 boost + 角色 boost + 服饰分数
+      ========================================================= */
+    function calculatePersonality() {
+      const scores = Object.fromEntries(Object.keys(RESULT_CONFIG).map(key => [key, 0]));
+      const addScores = scoreMap => {
+        if (!scoreMap) return;
+        Object.entries(scoreMap).forEach(([key, value]) => {
+          scores[key] = (scores[key] || 0) + value;
+        });
+      };
+
+      const scene = getCurrentScene();
+      const role = getCurrentRole();
+      addScores(scene.scores);
+      addScores(role.boost);
+
+      Object.keys(state.selectedClothes).forEach(categoryId => {
+        const clothing = getSelectedClothing(categoryId);
+        if (!clothing) return;
+        addScores(clothing.scores);
+      });
+
+      return Object.keys(scores).sort((a, b) => scores[b] - scores[a])[0];
+    }
+
+    function getSelectedItemsText() {
+      return CATEGORY_CONFIG.map(category => {
+        const clothing = getSelectedClothing(category.id);
+        return clothing ? clothing.brandName : "";
+      }).filter(Boolean).join(" · ");
+    }
+
+    function getSelectedCategoryText() {
+      return CATEGORY_CONFIG.map(category => {
+        const clothing = getSelectedClothing(category.id);
+        return clothing ? `${category.name}：${clothing.shortName}` : `${category.name}：留白`;
+      }).join(" / ");
+    }
+
+    function buildOutfitPlan(result) {
+      const scene = getCurrentScene();
+      const tags = getSelectedTagSummary(3);
+      const tagText = tags.length ? `这一套的显眼关键词是${tags.join("、")}。` : "这一套保留了轻松留白，重点放在整体状态。";
+      return `${scene.plan}${tagText} 三福把服饰、配饰和场景一起搭好，你只需要把今天这局主起来。`;
+    }
+
+    function getSelectedItemsMarkup() {
+      return CATEGORY_CONFIG.map(category => {
+        const clothing = getSelectedClothing(category.id);
+        if (!clothing) return "";
+        return `
+          <div class="poster-item">
+            <img src="${getClothingThumb(clothing)}" alt="${clothing.shortName}" />
+            <span>${clothing.shortName}</span>
+          </div>
+        `;
+      }).filter(Boolean).join("");
+    }
+
+    function validateCompletion() {
+      const missing = CATEGORY_CONFIG.find(category => category.required && !hasCategoryChoice(category.id));
+      if (!missing) return true;
+
+      state.categoryId = missing.id;
+      renderTabs();
+      renderOptions();
+      updateProgress();
+      showToast(`还差${missing.name}，选完就能生成海报啦！`);
+      return false;
+    }
+
+    /* =========================================================
+      11. 结果页
+      ========================================================= */
+    function handleGenerateResult() {
+      if (!validateCompletion()) return;
+
+      const role = getCurrentRole();
+      const scene = getCurrentScene();
+      const resultKey = calculatePersonality();
+      const result = RESULT_CONFIG[resultKey];
+      const selectedText = getSelectedItemsText();
+      const outfitPlan = buildOutfitPlan(result);
+
+      dom.posterScene.innerText = `${scene.emoji} ${scene.name}`;
+      dom.resultTitle.innerText = result.title;
+      dom.resultSubtitle.innerText = `${scene.name} · ${result.subtitle}`;
+      dom.resultDesc.innerText = `${scene.mood}${result.desc}`;
+      dom.outfitPlanText.innerText = outfitPlan;
+      dom.recommendText.innerText = result.recommend;
+      dom.keywordList.innerHTML = [...scene.keywords, ...result.keywords].slice(0, 6).map(keyword => `<li>${keyword}</li>`).join("");
+
+      dom.posterVisual.innerHTML = `
+        <div class="poster-look">
+          <img class="poster-avatar" src="${role.posterAvatar}" alt="${role.name}" onerror="this.outerHTML='<span class=&quot;poster-emoji&quot;>${role.emoji}</span>'" />
+          <div class="poster-items">${getSelectedItemsMarkup()}</div>
+        </div>
+      `;
+
+      lastShareText = `我在三福潮趣搭案局中生成了【${scene.name} · ${result.title}】！
+我的今日角色：${role.name}
+我的今日搭配：${selectedText || "留白也是一种态度"}
+我的搭案组合：${getSelectedCategoryText()}
+${result.share}
+和三福潮趣好搭子一起主个局，来测你的今日搭案！`;
+      dom.shareCopy.innerText = lastShareText;
+      dom.resultModal.style.display = "flex";
+    }
+
+    function resetGame() {
+      state.sceneId = SCENE_CONFIG[0].id;
+      state.roleId = ROLE_CONFIG[0].id;
+      state.categoryId = CATEGORY_CONFIG[0].id;
+      state.selectedClothes = {};
+      lastShareText = "";
+
+      document.querySelectorAll(".wear-layer").forEach(layer => {
+        layer.src = "";
+      });
+
+      document.querySelectorAll(".wear-shell").forEach(shell => {
+        shell.classList.remove("active");
+      });
+
+      document.querySelectorAll(".wear-chip").forEach(chip => {
+        chip.innerText = "";
+        chip.style.display = "none";
+      });
+
+      renderRoles();
+      renderScenes();
+      renderTabs();
+      renderOptions();
+      updateRoleVisual();
+      updateProgress();
+      dom.resultModal.style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      showToast("已重新开局，换一种风格再主一次！");
+    }
+
+    async function copyShareText() {
+      try {
+        await navigator.clipboard.writeText(lastShareText);
+        showToast("已复制分享文案");
+      } catch (error) {
+        showToast("复制失败，可长按文案手动复制");
+      }
+    }
+
+    function showToast(text) {
+      dom.toast.innerText = text;
+      dom.toast.classList.add("show");
+      setTimeout(() => dom.toast.classList.remove("show"), 1600);
+    }
+  </script>
+</body>
+</html>
