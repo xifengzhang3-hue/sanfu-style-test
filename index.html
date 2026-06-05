@@ -934,12 +934,12 @@
 
     /* 开场动画：打开衣柜，看见潮趣新世界 */
     .opening-screen {
-      --opening-scene-w: 238px;
-      --opening-scene-h: 256px;
-      --wardrobe-w: 190px;
-      --wardrobe-h: 226px;
-      --wardrobe-light-w: 170px;
-      --wardrobe-light-h: 188px;
+      --opening-scene-w: 286px;
+      --opening-scene-h: 308px;
+      --wardrobe-w: 230px;
+      --wardrobe-h: 272px;
+      --wardrobe-light-w: 208px;
+      --wardrobe-light-h: 232px;
       position: fixed;
       inset: 0;
       z-index: 100;
@@ -948,10 +948,11 @@
       justify-content: center;
       min-height: 100vh;
       min-height: 100dvh;
-      padding: max(18px, env(safe-area-inset-top)) 22px max(22px, env(safe-area-inset-bottom));
+      padding: max(18px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
       background:
-        radial-gradient(circle at 20% 12%, rgba(255, 230, 109, .72), transparent 24%),
-        radial-gradient(circle at 86% 16%, rgba(101, 215, 255, .55), transparent 25%),
+        radial-gradient(circle at 15% 16%, rgba(255, 230, 109, .6), transparent 22%),
+        radial-gradient(circle at 88% 30%, rgba(101, 215, 255, .4), transparent 22%),
+        radial-gradient(circle at 58% 94%, rgba(255, 230, 109, .45), transparent 30%),
         linear-gradient(145deg, #ff4f8b 0%, #ff9a3d 70%, #ffe66d 100%);
       overflow-x: hidden;
       overflow-y: auto;
@@ -977,14 +978,14 @@
       width: 120px;
       height: 120px;
       left: -32px;
-      top: 80px;
+      top: 92px;
     }
 
     .shape-2 {
       width: 90px;
       height: 90px;
       right: -18px;
-      top: 150px;
+      top: 210px;
       animation-delay: .8s;
     }
 
@@ -992,7 +993,7 @@
       width: 160px;
       height: 160px;
       right: 38px;
-      bottom: -62px;
+      bottom: -72px;
       animation-delay: 1.4s;
     }
 
@@ -1002,11 +1003,16 @@
     }
 
     .opening-card {
-      width: min(380px, 94vw);
+      width: min(410px, 95vw);
+      min-height: min(812px, calc(100dvh - 42px));
       position: relative;
       z-index: 2;
       color: #fff;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: clamp(14px, 2.4dvh, 24px);
       padding-top: 0;
       animation: openingEnter .72s cubic-bezier(.22,1,.36,1) both;
     }
@@ -1016,12 +1022,34 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    .opening-top-group,
+    .opening-text-group,
+    .opening-action-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .opening-top-group {
+      gap: clamp(14px, 2.2dvh, 22px);
+    }
+
+    .opening-text-group {
+      gap: clamp(9px, 1.5dvh, 14px);
+    }
+
+    .opening-action-group {
+      gap: 10px;
+      padding-bottom: clamp(0px, 1.5dvh, 12px);
+    }
+
     .opening-brand-row {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-bottom: 14px;
+      margin: 0;
     }
 
     .opening-brand,
@@ -1029,9 +1057,9 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 6px 10px;
+      padding: 7px 12px;
       border-radius: 999px;
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 1000;
       letter-spacing: .6px;
       border: 1px solid rgba(255,255,255,.32);
@@ -1046,7 +1074,7 @@
     .wardrobe-scene {
       width: var(--opening-scene-w);
       height: var(--opening-scene-h);
-      margin: 0 auto 15px;
+      margin: 0 auto;
       position: relative;
       perspective: 900px;
       border: 0;
@@ -1108,7 +1136,7 @@
       border-radius: 30px 30px 18px 18px;
       border: 5px solid rgba(255,255,255,.92);
       background: linear-gradient(180deg, #fff, #fff0f7);
-      box-shadow: 0 22px 46px rgba(105,24,75,.3);
+      box-shadow: 0 18px 38px rgba(105,24,75,.26);
       overflow: hidden;
     }
 
@@ -1199,9 +1227,9 @@
     }
 
     .opening-title {
-      margin-bottom: 10px;
-      font-size: 28px;
-      line-height: 1.18;
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.16;
       font-weight: 1000;
       text-shadow: 0 5px 16px rgba(105,24,75,.22);
     }
@@ -1211,12 +1239,12 @@
     }
 
     .opening-copy {
-      margin: 0 auto 14px;
-      width: min(100%, 320px);
-      max-width: min(320px, calc(100vw - 44px));
+      margin: 0 auto;
+      width: min(100%, 326px);
+      max-width: min(326px, calc(100vw - 38px));
       color: rgba(255,255,255,.95);
       font-size: 14px;
-      line-height: 1.62;
+      line-height: 1.64;
       overflow-wrap: anywhere;
       word-break: break-word;
     }
@@ -1226,30 +1254,31 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 7px;
-      margin: 0 auto 16px;
-      max-width: min(320px, calc(100vw - 44px));
+      margin: 0 auto;
+      max-width: min(340px, calc(100vw - 38px));
     }
 
     .opening-tags span {
-      padding: 5px 9px;
+      padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.9);
       color: var(--pink);
       font-size: 12px;
       font-weight: 1000;
     }
 
     .opening-action-hint {
-      width: min(100%, 320px);
+      width: min(90vw, 352px);
       box-sizing: border-box;
-      padding: 13px 18px;
+      padding: 14px 18px;
       border-radius: 999px;
-      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(255,255,255,.72);
+      background: rgba(255,255,255,.86);
       color: var(--pink);
-      font-size: 15px;
+      font-size: 15.5px;
       font-weight: 1000;
-      box-shadow: 0 14px 28px rgba(106,24,75,.16);
-      animation: openingBtnPulse 1.35s infinite alternate;
+      box-shadow: 0 10px 22px rgba(106,24,75,.13);
+      animation: openingBtnPulse 1.55s infinite alternate;
       transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
     }
 
@@ -1266,11 +1295,11 @@
 
     @keyframes openingBtnPulse {
       from { transform: scale(1); filter: brightness(1); }
-      to { transform: scale(1.035); filter: brightness(1.03); }
+      to { transform: scale(1.018); filter: brightness(1.025); }
     }
 
     .opening-gesture-copy {
-      margin-top: 11px;
+      margin-top: 0;
       color: rgba(255,255,255,.9);
       font-size: 12.5px;
       font-weight: 800;
@@ -1291,27 +1320,40 @@
 
     @media (max-height: 760px) {
       .opening-screen {
-        --opening-scene-w: 204px;
-        --opening-scene-h: 218px;
-        --wardrobe-w: 164px;
-        --wardrobe-h: 194px;
-        --wardrobe-light-w: 146px;
-        --wardrobe-light-h: 160px;
-        padding: max(10px, env(safe-area-inset-top)) 18px max(12px, env(safe-area-inset-bottom));
+        --opening-scene-w: 238px;
+        --opening-scene-h: 256px;
+        --wardrobe-w: 192px;
+        --wardrobe-h: 226px;
+        --wardrobe-light-w: 172px;
+        --wardrobe-light-h: 190px;
+        padding: max(12px, env(safe-area-inset-top)) 18px max(16px, env(safe-area-inset-bottom));
+      }
+
+      .opening-card {
+        min-height: min(704px, calc(100dvh - 28px));
+        gap: 12px;
+      }
+
+      .opening-top-group {
+        gap: 11px;
+      }
+
+      .opening-text-group {
+        gap: 7px;
+      }
+
+      .opening-action-group {
+        gap: 7px;
       }
 
       .opening-brand-row {
-        margin-bottom: 8px;
+        gap: 7px;
       }
 
       .opening-brand,
       .opening-theme {
-        padding: 5px 9px;
-        font-size: 10px;
-      }
-
-      .wardrobe-scene {
-        margin-bottom: 9px;
+        padding: 6px 10px;
+        font-size: 10.5px;
       }
 
       .wardrobe-inner {
@@ -1328,51 +1370,61 @@
       }
 
       .opening-title {
-        margin-bottom: 7px;
-        font-size: 25px;
+        font-size: 27px;
       }
 
       .opening-copy {
-        margin-bottom: 9px;
-        font-size: 12.8px;
-        line-height: 1.48;
+        font-size: 13px;
+        line-height: 1.5;
       }
 
       .opening-tags {
         gap: 5px;
-        margin-bottom: 10px;
       }
 
       .opening-tags span {
-        padding: 4px 8px;
-        font-size: 11px;
+        padding: 5px 9px;
+        font-size: 11.5px;
       }
 
       .opening-action-hint {
-        padding: 11px 16px;
+        padding: 12px 16px;
         font-size: 14px;
       }
 
       .opening-gesture-copy {
-        margin-top: 7px;
         font-size: 11.5px;
       }
     }
 
     @media (max-height: 660px) {
       .opening-screen {
-        --opening-scene-w: 174px;
-        --opening-scene-h: 187px;
-        --wardrobe-w: 140px;
-        --wardrobe-h: 166px;
-        --wardrobe-light-w: 124px;
-        --wardrobe-light-h: 136px;
+        --opening-scene-w: 196px;
+        --opening-scene-h: 211px;
+        --wardrobe-w: 158px;
+        --wardrobe-h: 187px;
+        --wardrobe-light-w: 140px;
+        --wardrobe-light-h: 155px;
         padding-left: 16px;
         padding-right: 16px;
       }
 
       .opening-card {
         width: min(360px, calc(100vw - 28px));
+        min-height: min(626px, calc(100dvh - 18px));
+        gap: 8px;
+      }
+
+      .opening-top-group {
+        gap: 8px;
+      }
+
+      .opening-text-group {
+        gap: 5px;
+      }
+
+      .opening-action-group {
+        gap: 5px;
       }
 
       .wardrobe-light {
@@ -1402,17 +1454,17 @@
       .item-4 { right: 49px; top: 24px; }
 
       .opening-title {
-        font-size: 22px;
+        font-size: 23px;
       }
 
       .opening-copy {
         font-size: 12px;
         line-height: 1.42;
-        max-width: 236px;
+        max-width: 260px;
       }
 
       .opening-action-hint {
-        width: min(100%, 288px);
+        width: min(90vw, 306px);
       }
     }
   </style>
@@ -1424,39 +1476,45 @@
     <div class="opening-bg-shape shape-3"></div>
 
     <div class="opening-card">
-      <div class="opening-brand-row">
-        <span class="opening-brand">SANFU STYLE TEST</span>
-        <span class="opening-theme">潮趣好搭子</span>
-      </div>
-
-      <button class="wardrobe-scene" id="wardrobeOpenBtn" type="button" aria-label="点击衣柜门，推开今日搭案">
-        <div class="wardrobe-light"></div>
-        <div class="wardrobe-body">
-          <div class="wardrobe-inner">
-            <span class="wardrobe-item item-1">👕</span>
-            <span class="wardrobe-item item-2">🧢</span>
-            <span class="wardrobe-item item-3">👟</span>
-            <span class="wardrobe-item item-4">✨</span>
-          </div>
-          <div class="wardrobe-door door-left"></div>
-          <div class="wardrobe-door door-right"></div>
+      <div class="opening-top-group">
+        <div class="opening-brand-row">
+          <span class="opening-brand">SANFU STYLE TEST</span>
+          <span class="opening-theme">潮趣好搭子</span>
         </div>
-      </button>
 
-      <h1 class="opening-title">今天主什么局？<br /><span>三福陪你搭</span></h1>
-      <p class="opening-copy">
-        选一个生活场景，搭一套三福单品，<br />让潮趣和心情一起开局。
-      </p>
-
-      <div class="opening-tags" aria-label="三福潮趣好搭子关键词">
-        <span>好逛</span>
-        <span>好搭</span>
-        <span>好出片</span>
-        <span>一起主个局</span>
+        <button class="wardrobe-scene" id="wardrobeOpenBtn" type="button" aria-label="点击衣柜门，推开今日搭案">
+          <div class="wardrobe-light"></div>
+          <div class="wardrobe-body">
+            <div class="wardrobe-inner">
+              <span class="wardrobe-item item-1">👕</span>
+              <span class="wardrobe-item item-2">🧢</span>
+              <span class="wardrobe-item item-3">👟</span>
+              <span class="wardrobe-item item-4">✨</span>
+            </div>
+            <div class="wardrobe-door door-left"></div>
+            <div class="wardrobe-door door-right"></div>
+          </div>
+        </button>
       </div>
 
-      <button class="opening-action-hint" id="openingHintBtn" type="button">点击衣柜门，推开今日搭案</button>
-      <div class="opening-gesture-copy">三福已经把潮趣灵感放进衣柜里啦</div>
+      <div class="opening-text-group">
+        <h1 class="opening-title">今天主什么局？<br /><span>三福陪你搭</span></h1>
+        <p class="opening-copy">
+          选一个生活场景，搭一套三福单品，<br />让潮趣和心情一起开局。
+        </p>
+
+        <div class="opening-tags" aria-label="三福潮趣好搭子关键词">
+          <span>好逛</span>
+          <span>好搭</span>
+          <span>好出片</span>
+          <span>一起主个局</span>
+        </div>
+      </div>
+
+      <div class="opening-action-group">
+        <button class="opening-action-hint" id="openingHintBtn" type="button">点击衣柜门，推开今日搭案</button>
+        <div class="opening-gesture-copy">三福已经把潮趣灵感放进衣柜里啦</div>
+      </div>
     </div>
   </section>
 
